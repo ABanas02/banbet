@@ -3,8 +3,6 @@ using banbet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -57,7 +55,50 @@ namespace banbet.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok($"Utworzono nowego użytkownika:{user.Username}");
+            return Ok($"Utworzono nowego użytkownika:{user.Username} {user.BirthDate} {user.Email}");
+        }
+
+
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            var user = await _dbContext.Users.SingleAsync(u => u.Username == loginDto.Username);
+
+            
+
+            if (BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            {
+                var token = GenerateJwtToken(user);
+                return Ok(new { Token = token });
+            }
+
+
+            return BadRequest("Weryfikacja nieudana");
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
+                new Claim("role", "User") // Możesz dodać role, jeśli to konieczne
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(12),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

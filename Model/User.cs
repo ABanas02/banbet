@@ -17,6 +17,9 @@ namespace banbet.Models
         public string PasswordHash { get; set; } // Hasło zaszyfrowane
 
         [Required]
+        public DateTime BirthDate { get; set; }
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
