@@ -23,6 +23,8 @@ namespace banbet.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        public string Role { get; set; } = "User"; // Domyślnie "User"
+
         public decimal VirtualBalance { get; set; } = 0;
 
         public bool IsIdentityVerified { get; set; } = false;

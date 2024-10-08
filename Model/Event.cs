@@ -18,13 +18,13 @@ namespace banbet.Models
         [Required]
         public EventStatus EventStatus { get; set; } = EventStatus.Upcoming;
 
-        public string Result { get; set; }
+        public string? Result { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public ICollection<Bet> Bets { get; set; }
+        public ICollection<Bet>? Bets { get; set; }
 
-        public ICollection<Odd> Odds { get; set; }
+        public ICollection<Odd>? Odds { get; set; }
     }
 
     public enum EventStatus

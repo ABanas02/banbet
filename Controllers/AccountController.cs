@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using banbet.Models.DTOs;
+using System.Text.Json;
 
 namespace banbet.Controllers 
 {
@@ -23,7 +24,26 @@ namespace banbet.Controllers
             _dbContext = dbContext;
             _configuration = configuration;
         }
+        
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _dbContext.Users.ToListAsync();
 
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser([FromRoute] int id)
+        {
+            var user = await _dbContext.Users.FindAsync(id);
+            if (user is null)
+            {
+                return NotFound($"Uzytkownik o id: {id} nie istnieje");
+            }
+
+            return Ok(user);
+        }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
@@ -44,11 +64,25 @@ namespace banbet.Controllers
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
 
+            string role = "User";
+            if (!string.IsNullOrEmpty(registerDto.Role) && registerDto.Role == "Admin")
+            {
+                // Sprawdź, czy obecny użytkownik ma uprawnienia do tworzenia administratora
+                // if (!User.IsInRole("Admin"))
+                // {
+                //     return Forbid("Tylko administrator może tworzyć innych administratorów.");
+                // }
+                role = "Admin";
+            }
+
+            
+
             var user = new User 
             {
                 Username = registerDto.Username,
                 PasswordHash = passwordHash,
-                Email = registerDto.Email
+                Email = registerDto.Email,
+                Role = role
             };
 
             _dbContext.Users.Add(user);
@@ -58,6 +92,22 @@ namespace banbet.Controllers
             return Ok($"Utworzono nowego użytkownika:{user.Username} {user.BirthDate} {user.Email}");
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var user = await _dbContext.Users.FindAsync(id);
+
+            if (user is null)
+            {
+                return NotFound($"Uzytkownik o id: {id} nie istnieje");
+            }
+            
+            _dbContext.Users.Remove(user);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok($"Usunięto uzytkownika o nazwie: {user.Username}, id: {user.UserID}");
+        }
 
 
         [HttpPost("Login")]
@@ -85,7 +135,7 @@ namespace banbet.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim("role", "User") // Możesz dodać role, jeśli to konieczne
+                new Claim(ClaimTypes.Role, user.Role) // Dodajemy rolę
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
