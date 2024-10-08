@@ -11,12 +11,13 @@ namespace banbet.Models
         [Required]
         public string TeamName { get; set; }
 
-        public string League { get; set; }
+        public string? League { get; set; }
 
-        public string Country { get; set; }
+        public string? Country { get; set; }
+        
+        public ICollection<EventTeam> EventTeams { get; set; } = new List<EventTeam>();
 
-        public string LogoUrl { get; set; }
-
-        public ICollection<Player> Players { get; set; }
+        
+        //public ICollection<Player> Players { get; set; }
     }
 }

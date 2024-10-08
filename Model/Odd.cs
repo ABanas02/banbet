@@ -12,6 +12,7 @@ namespace banbet.Models
         [Required]
         [ForeignKey("Event")]
         public int EventID { get; set; }
+        public Event Event { get; set; }
 
         [Required]
         public BetType BetType { get; set; }
@@ -22,6 +23,9 @@ namespace banbet.Models
         [Required]
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 
-        public Event Event { get; set; }
+
+
+        public int? TeamID { get; set; }
+        public Team Team { get; set; }
     }
 }

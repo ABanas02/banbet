@@ -16,13 +16,26 @@ namespace banbet.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Odd> Odds { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Przykład konfiguracji relacji jeden-do-wielu
+            modelBuilder.Entity<EventTeam>()
+                .HasKey(et => new { et.EventID, et.TeamID });
+
+            modelBuilder.Entity<EventTeam>()
+                .HasOne(et => et.Event)
+                .WithMany(e => e.EventTeams)
+                .HasForeignKey(et => et.EventID);
+
+            modelBuilder.Entity<EventTeam>()
+                .HasOne(et => et.Team)
+                .WithMany(t => t.EventTeams)
+                .HasForeignKey(et => et.TeamID);
+
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Bets)
                 .WithOne(b => b.User)
@@ -53,11 +66,11 @@ namespace banbet.Data
                 .HasForeignKey(o => o.EventID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Team>()
-                .HasMany(t => t.Players)
-                .WithOne(p => p.Team)
-                .HasForeignKey(p => p.TeamID)
-                .OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<Team>()
+            //     .HasMany(t => t.Players)
+            //     .WithOne(p => p.Team)
+            //     .HasForeignKey(p => p.TeamID)
+            //     .OnDelete(DeleteBehavior.SetNull);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -39,9 +39,9 @@ namespace banbet.Models
 
     public enum BetType
     {
-        MatchResult,
-        TotalGoals,
-        // Dodaj inne typy zakładów
+        MatchWinner,  
+        TotalGoals, 
+        BothTeamsScore,
     }
 
     public enum BetStatus
