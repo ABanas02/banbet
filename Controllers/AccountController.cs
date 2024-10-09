@@ -127,6 +127,8 @@ namespace banbet.Controllers
             return BadRequest("Weryfikacja nieudana");
         }
 
+        
+
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
