@@ -25,7 +25,7 @@ namespace banbet.Models
 
         public string Role { get; set; } = "User"; // Domyślnie "User"
 
-        public decimal VirtualBalance { get; set; } = 0;
+        public decimal VirtualBalance { get; set; } = 1000.00m;
 
         public bool IsIdentityVerified { get; set; } = false;
 

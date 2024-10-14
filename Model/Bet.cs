@@ -21,6 +21,11 @@ namespace banbet.Models
         public decimal BetAmount { get; set; }
 
         [Required]
+        [ForeignKey("Odd")]
+        public int OddsID { get; set; }
+        public Odd Odd { get; set; }
+
+        [Required]
         public BetType BetType { get; set; }
 
         [Required]
@@ -41,7 +46,7 @@ namespace banbet.Models
     {
         MatchWinner,  
         TotalGoals, 
-        BothTeamsScore,
+        BothTeamsScoreW
     }
 
     public enum BetStatus

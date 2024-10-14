@@ -27,7 +27,7 @@ namespace banbet.Controllers
         {
             var teams = await _dbContext.Teams.ToListAsync();
 
-            if (teams is null)
+            if (teams.Count == 0 || teams is null)
             {
                 return NotFound("Nie znaleziono zadnych druzyn");
             }
@@ -78,6 +78,36 @@ namespace banbet.Controllers
             await _dbContext.SaveChangesAsync();
 
             return Ok($"Usunięto druzyne {team.TeamName}");
+        }
+
+        [HttpPost("AddTeamsToEvent")]
+        public async Task<IActionResult> AddTeamsToEvent([FromBody] AddTeamsToEventDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var eventItem = await _dbContext.Events.FindAsync(dto.EventID);
+            if (eventItem == null)
+                return NotFound($"Wydarzenie o ID {dto.EventID} nie istnieje.");
+
+            foreach (var teamId in dto.TeamIDs)
+            {
+                var team = await _dbContext.Teams.FindAsync(teamId);
+                if (team == null)
+                    return NotFound($"Drużyna o ID {teamId} nie istnieje.");
+
+                var eventTeam = new EventTeam
+                {
+                    EventID = dto.EventID,
+                    TeamID = teamId
+                };
+
+                _dbContext.EventTeams.Add(eventTeam);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok($"Drużyny zostały dodane do wydarzenia o ID {dto.EventID}.");
         }
     }
 }

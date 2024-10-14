@@ -14,5 +14,7 @@ namespace banbet.Models.DTOs
 
         [Required]
         public decimal OddsValue { get; set; }
+
+        public int? TeamID { get; set; }
     }
 }
