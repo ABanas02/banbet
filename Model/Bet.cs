@@ -46,7 +46,7 @@ namespace banbet.Models
     {
         MatchWinner,  
         TotalGoals, 
-        BothTeamsScoreW
+        BothTeamsScore
     }
 
     public enum BetStatus

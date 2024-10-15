@@ -26,8 +26,6 @@ builder.Services.AddDbContext<ApplicationDbContext>
 );
 
 
-
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.AddAuthentication(options =>
 {

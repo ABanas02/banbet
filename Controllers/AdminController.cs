@@ -20,10 +20,5 @@ namespace banbet.Controllers
             _dbContext = dbContext;
             _logger = logger;
         }
-
-        
-
-        
-    
     }
 }

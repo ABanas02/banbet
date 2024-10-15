@@ -62,7 +62,6 @@ namespace banbet.Controllers
             if (eventItem == null)
                 return NotFound();
 
-            // Mapowanie na DTO
             var eventDto = new EventResponseDto
             {
                 EventID = eventItem.EventID,
