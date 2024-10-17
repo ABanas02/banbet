@@ -108,9 +108,12 @@ namespace banbet.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _dbContext.Users.SingleAsync(u => u.Username == loginDto.Username);
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == loginDto.Username);
 
-            
+            if (user is null)
+            {
+                return NotFound("Nie znaleziono uzytkownika");
+            }
 
             if (BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
