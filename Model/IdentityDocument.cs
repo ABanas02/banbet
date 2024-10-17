@@ -14,7 +14,7 @@ namespace banbet.Models
         public int UserID { get; set; }
 
         [Required]
-        public string DocumentType { get; set; } // np. Dowód osobisty
+        public string DocumentType { get; set; }
 
         [Required]
         public DateTime SubmissionDate { get; set; } = DateTime.UtcNow;

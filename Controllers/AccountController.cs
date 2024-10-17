@@ -67,11 +67,6 @@ namespace banbet.Controllers
             string role = "User";
             if (!string.IsNullOrEmpty(registerDto.Role) && registerDto.Role == "Admin")
             {
-                // Sprawdź, czy obecny użytkownik ma uprawnienia do tworzenia administratora
-                // if (!User.IsInRole("Admin"))
-                // {
-                //     return Forbid("Tylko administrator może tworzyć innych administratorów.");
-                // }
                 role = "Admin";
             }
 
@@ -109,7 +104,7 @@ namespace banbet.Controllers
             return Ok($"Usunięto uzytkownika o nazwie: {user.Username}, id: {user.UserID}");
         }
 
-
+        
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
@@ -137,7 +132,7 @@ namespace banbet.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim(ClaimTypes.Role, user.Role) // Dodajemy rolę
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
