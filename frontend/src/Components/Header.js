@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
 import LoginModal from './LoginModal';
+import './Header.css';
 
-function Header() {
+function Header({ isLoggedIn, setIsLoggedIn }) {
   const [showLogin, setShowLogin] = useState(false);
 
   const handleLoginClick = () => {
     setShowLogin(true);
   };
 
+  const handleLogoutClick = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+
   return (
     <header className="App-header">
-      <h1>banbet</h1>
-      <button onClick={handleLoginClick}>Zaloguj</button>
-      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+      <div className="header-content">
+        <h1 className="app-name">banbet</h1>
+        {!isLoggedIn ? (
+          <button className="login-button" onClick={handleLoginClick}>
+            Zaloguj
+          </button>
+        ) : (
+          <button className="logout-button" onClick={handleLogoutClick}>
+            Wyloguj
+          </button>
+        )}
+      </div>
+      {showLogin && (
+        <LoginModal
+          onClose={() => setShowLogin(false)}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
     </header>
   );
 }

@@ -12,6 +12,7 @@
   
   .modal {
     background-color: white;
+    color: black;
     padding: 20px;
     border-radius: 5px;
   }
@@ -35,6 +36,7 @@
   
   .modal form label {
     margin-bottom: 5px;
+    color: black;
   }
   
   .modal form input {

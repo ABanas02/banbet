@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginModal.css';
 
-function LoginModal({ onClose }) {
+function LoginModal({ onClose, setIsLoggedIn }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,6 +24,7 @@ function LoginModal({ onClose }) {
   
       const data = await response.json();
       localStorage.setItem('token', data.token);
+      setIsLoggedIn(true);
       onClose();
     } catch (err) {
       setError(err.message);
