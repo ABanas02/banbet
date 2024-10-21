@@ -23,6 +23,7 @@ namespace banbet.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto eventDto)
         {
             var newEvent = new Event
@@ -40,6 +41,7 @@ namespace banbet.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEvents()
         {
             var events = await _dbContext.Events
