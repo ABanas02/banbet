@@ -44,6 +44,21 @@ margin-right: 18px;
 background-color: #21a1f1;
 }
 
+.admin-button {
+background-color: #61dafb;
+border: none;
+color: #282c34;
+padding: 10px 20px;
+font-size: 16px;
+cursor: pointer;
+border-radius: 5px;
+margin-right: 18px;
+}
+
+.admin-button:hover {
+background-color: #21a1f1;
+}
+
 .login-button:hover {
 background-color: #21a1f1;
 }
@@ -57,6 +72,7 @@ padding: 10px 20px;
 font-size: 16px;
 cursor: pointer;
 border-radius: 5px;
+margin-right: 18px;
 }
 
 .logout-button:hover {

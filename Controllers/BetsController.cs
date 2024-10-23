@@ -10,7 +10,7 @@ using banbet.Models.DTOs;
 
 namespace banbet.Controllers
 {
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     [ApiController]
     [Route("api/[controller]")]
     public class BetsController : ControllerBase

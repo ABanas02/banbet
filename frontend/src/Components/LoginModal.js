@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import './LoginModal.css';
 
-function LoginModal({ onClose, setIsLoggedIn }) {
+function LoginModal({ onClose, setIsLoggedIn, setIsAdmin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,15 +22,36 @@ function LoginModal({ onClose, setIsLoggedIn }) {
       if (!response.ok) {
         throw new Error('Nieprawidłowa nazwa użytkownika lub hasło.');
       }
-  
+      
       const data = await response.json();
       localStorage.setItem('token', data.token);
       setIsLoggedIn(true);
+      if (getUserRole() === "Admin")
+      {
+        setIsAdmin(true);
+      }
       onClose();
     } catch (err) {
       setError(err.message);
     }
   };
+
+
+  function getUserRole() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return null;
+    }
+  
+    try {
+      const decodedToken = jwtDecode(token);
+      const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role;
+    } catch (error) {
+      console.error('Błąd podczas dekodowania tokenu JWT:', error);
+      return null;
+    }
+  }
 
   return (
     <div className="modal-overlay">

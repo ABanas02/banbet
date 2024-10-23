@@ -3,7 +3,7 @@ import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal'
 import './Header.css';
 
-function Header({ isLoggedIn, setIsLoggedIn }) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -14,6 +14,7 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
   const handleLogoutClick = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    setIsAdmin(false);
   };
 
   const handleRegisterClick = () => {
@@ -39,12 +40,18 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
               Zarejestruj
             </button>
           }
+          {isAdmin &&
+            <button className='admin-button'>
+            Panel Admina
+            </button> 
+          }
         </div>
       </div>
       {showLogin && (
         <LoginModal
           onClose={() => setShowLogin(false)}
           setIsLoggedIn={setIsLoggedIn}
+          setIsAdmin={setIsAdmin}
         />
       )}
       {showRegister && (

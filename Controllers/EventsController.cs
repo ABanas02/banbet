@@ -46,10 +46,35 @@ namespace banbet.Controllers
         {
             var events = await _dbContext.Events
                 .Include(e => e.Odds)
+                .Include(e => e.EventTeams)
+                    .ThenInclude(et => et.Team)
                 .Where(e => e.EventStatus == EventStatus.Upcoming)
                 .ToListAsync();
-            return Ok(events);
+
+            var eventDtos = events.Select(eventItem => new EventResponseDto
+            {
+                EventID = eventItem.EventID,
+                EventName = eventItem.EventName,
+                StartDateTime = eventItem.StartDateTime,
+                EventStatus = eventItem.EventStatus,
+                Result = eventItem.Result,
+                Description = eventItem.Description,
+                Teams = eventItem.EventTeams.Select(et => new TeamDto
+                {
+                    TeamID = et.Team.TeamID,
+                    TeamName = et.Team.TeamName
+                }).ToList(),
+                Odds = eventItem.Odds.Select(o => new OddDto
+                {
+                    BetType = o.BetType,
+                    OddsValue = o.OddsValue,
+                    TeamID = o.TeamID
+                }).ToList()
+            }).ToList();
+
+            return Ok(eventDtos);
         }
+
 
         [HttpGet("{id}")]
         [AllowAnonymous]

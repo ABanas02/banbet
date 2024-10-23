@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace banbet.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/{controller}")]
     public class OddsController: ControllerBase
