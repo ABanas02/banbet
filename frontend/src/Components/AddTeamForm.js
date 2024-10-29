@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-//import './AddTeamForm.css';
 
-function AddTeamForm() {
+function AddTeamForm({teamsChanged, onTeamsChanged}) {
   const [teamName, setTeamName] = useState('');
   const [message, setMessage] = useState('');
 
@@ -29,6 +28,7 @@ function AddTeamForm() {
       const data = await response.json();
       setMessage(`Drużyna ${data.teamName} została dodana.`);
       setTeamName('');
+      onTeamsChanged();
     } catch (error) {
       setMessage(error.message);
     }

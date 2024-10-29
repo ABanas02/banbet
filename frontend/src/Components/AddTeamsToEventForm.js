@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-//import './AddTeamsToEventForm.css';
 
-function AddTeamsToEventForm() {
+function AddTeamsToEventForm({onTeamsChanged, teamsChanged}) {
   const [events, setEvents] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
@@ -36,7 +35,7 @@ function AddTeamsToEventForm() {
     };
 
     fetchEventsAndTeams();
-  }, []);
+  }, [teamsChanged]);
 
   const handleAddTeamsToEvent = async (e) => {
     e.preventDefault();

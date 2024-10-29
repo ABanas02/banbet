@@ -19,6 +19,12 @@ justify-content: space-between;
 margin: 0;
 }
 
+.app-name-link {
+    text-decoration: none;
+    color: inherit; 
+    cursor: pointer;
+}
+
 .login-button {
 background-color: #61dafb;
 border: none;

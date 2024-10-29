@@ -25,7 +25,9 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin})
   return (
     <header className="App-header">
       <div className="header-content">
-        <h1 className="app-name">banbet</h1>
+        <Link to="/" className='app-name-link'>
+          <h1 className="app-name">banbet</h1>
+        </Link>
         <div className='header-buttons'>
           {!isLoggedIn ? (
             <button className="login-button" onClick={handleLoginClick}>

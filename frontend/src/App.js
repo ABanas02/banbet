@@ -9,6 +9,7 @@ import AdminPanel from './Components/AdminPanel';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [isAdmin, setIsAdmin] = useState(checkIfAdmin());
+  const [teamsChanged, setTeamsChanged] = useState(false);
 
   return (
     <Router>
@@ -16,7 +17,7 @@ function App() {
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin} checkIfAdmin={checkIfAdmin}/>
         <Routes>
           <Route path="/" element={<MainPageEvents />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin" element={<AdminPanel teamsChanged={teamsChanged} onTeamsChanged={() => setTeamsChanged(true)}/>} />
         </Routes>
       </div>
     </Router>
