@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal'
-import './Header.css';
+import './css/Header.css';
+import { Link } from 'react-router-dom';
 
-function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -40,11 +41,11 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) {
               Zarejestruj
             </button>
           }
-          {isAdmin &&
-            <button className='admin-button'>
-            Panel Admina
-            </button> 
-          }
+          {isAdmin && (
+            <Link to="/admin">
+              <button className="admin-button">Panel Admina</button>
+            </Link>
+          )}
         </div>
       </div>
       {showLogin && (
@@ -52,6 +53,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) {
           onClose={() => setShowLogin(false)}
           setIsLoggedIn={setIsLoggedIn}
           setIsAdmin={setIsAdmin}
+          checkIfAdmin={checkIfAdmin}
         />
       )}
       {showRegister && (

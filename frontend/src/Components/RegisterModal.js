@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './LoginModal.css';
+import './css/LoginModal.css';
 
 function RegisterModal({ onClose, setIsLoggedIn }) {
   const [username, setUsername] = useState('');

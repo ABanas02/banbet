@@ -26,10 +26,17 @@ namespace banbet.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto eventDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            var startDateTimeUtc = DateTime.SpecifyKind(eventDto.StartDateTime, DateTimeKind.Utc);
+
             var newEvent = new Event
             {
                 EventName = eventDto.EventName,
-                StartDateTime = eventDto.StartDateTime,
+                StartDateTime = startDateTimeUtc,
                 Description = eventDto.Description,
                 EventStatus = EventStatus.Upcoming
             };

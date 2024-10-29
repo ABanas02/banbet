@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import './LoginModal.css';
+import './css/LoginModal.css';
 
-function LoginModal({ onClose, setIsLoggedIn, setIsAdmin }) {
+function LoginModal({ onClose, setIsLoggedIn, setIsAdmin, checkIfAdmin}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,7 +26,7 @@ function LoginModal({ onClose, setIsLoggedIn, setIsAdmin }) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       setIsLoggedIn(true);
-      if (getUserRole() === "Admin")
+      if (checkIfAdmin())
       {
         setIsAdmin(true);
       }
@@ -35,23 +35,6 @@ function LoginModal({ onClose, setIsLoggedIn, setIsAdmin }) {
       setError(err.message);
     }
   };
-
-
-  function getUserRole() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return null;
-    }
-  
-    try {
-      const decodedToken = jwtDecode(token);
-      const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      return role;
-    } catch (error) {
-      console.error('Błąd podczas dekodowania tokenu JWT:', error);
-      return null;
-    }
-  }
 
   return (
     <div className="modal-overlay">
