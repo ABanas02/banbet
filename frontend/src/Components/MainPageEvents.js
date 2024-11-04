@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import EventDetailsModal from './EventDetailsModal';
 import './css/MainPageEvents.css';
 
 function MainPageEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedEventID, setSelectedEventID] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -25,6 +28,16 @@ function MainPageEvents() {
     fetchEvents();
   }, []);
 
+  const handleEventClick = (eventID) => {
+    setSelectedEventID(eventID);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedEventID(null);
+  };
+
   if (loading) {
     return <p>Ładowanie wydarzeń...</p>;
   }
@@ -36,7 +49,7 @@ function MainPageEvents() {
   return (
     <div className="events-container">
       {events.map((event) => (
-        <div key={event.eventID} className="event-card">
+        <div key={event.eventID} className="event-card" onClick={() => handleEventClick(event.eventID)}>
           {event.teams && event.teams.length >= 2 ? (
             <h3>
               {event.teams[0].teamName} vs {event.teams[1].teamName}
@@ -47,6 +60,9 @@ function MainPageEvents() {
           <p>Data: {new Date(event.startDateTime).toLocaleString()}</p>
         </div>
       ))}
+      {showModal && (
+        <EventDetailsModal eventID={selectedEventID} onClose={handleCloseModal} />
+      )}
     </div>
   );
 }
