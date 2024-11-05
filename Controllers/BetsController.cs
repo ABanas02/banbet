@@ -35,8 +35,8 @@ namespace banbet.Controllers
             if (user == null)
                 return NotFound("Użytkownik nie został znaleziony.");
 
-            if (!user.IsIdentityVerified)
-                return BadRequest("Wiek użytkownika nie zweryfikowany!");
+            // if (!user.IsIdentityVerified)
+            //     return BadRequest("Wiek użytkownika nie zweryfikowany!");
             
             if (user.VirtualBalance < betDto.BetAmount)
                 return BadRequest("Niewystarczające saldo.");

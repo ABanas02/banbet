@@ -5,6 +5,7 @@ namespace banbet.Models.DTOs
 {
     public class OddDto
     {
+        public int OddsID { get; set; }
         public int EventID { get; set; }
         public BetType BetType { get; set; }
         public decimal OddsValue { get; set; }

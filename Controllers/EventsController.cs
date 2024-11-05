@@ -110,6 +110,7 @@ namespace banbet.Controllers
                 }).ToList(),
                 Odds = eventItem.Odds.Select(o => new OddDto
                 {
+                    OddsID = o.OddsID,
                     BetType = o.BetType,
                     OddsValue = o.OddsValue,
                     TeamID = o.TeamID
