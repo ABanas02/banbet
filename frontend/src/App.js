@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import MainPageEvents from './Components/MainPageEvents';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminPanel from './Components/AdminPanel';
+import UserPanel from './Components/UserPanel';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPageEvents />} />
           <Route path="/admin" element={<AdminPanel teamsChanged={teamsChanged} onTeamsChanged={() => setTeamsChanged(true)}/>} />
+          <Route path="/user" element={<UserPanel />}/>
         </Routes>
       </div>
     </Router>

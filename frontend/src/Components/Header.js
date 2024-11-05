@@ -48,6 +48,11 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin})
               <button className="admin-button">Panel Admina</button>
             </Link>
           )}
+          {!isAdmin && isLoggedIn && (
+            <Link to="/user">
+              <button className='admin-button'>Panel Użytkownika</button>
+            </Link>
+          )}
         </div>
       </div>
       {showLogin && (
