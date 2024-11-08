@@ -26,6 +26,7 @@ namespace banbet.Controllers
         {
             var odds = await _dbContext.Odds
                 .Include(o => o.Event)
+                .ThenInclude(e => e.Bets)
                 .ToListAsync();
             
             return Ok(odds);

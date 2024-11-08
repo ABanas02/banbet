@@ -90,6 +90,67 @@ namespace banbet.Controllers
             return Ok(bets);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ResolveMatchWinnerBets([FromBody] ResolveMatchWinnerDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            if (dto == null)
+                return BadRequest("Nieprawidłowe dane wejściowe.");
+
+            var eventItem = await _dbContext.Events.SingleOrDefaultAsync(e => e.EventID == dto.EventID);
+            if (eventItem == null)
+                return NotFound("Wydarzenie nie zostało znalezione.");
+
+            var teamExists = await _dbContext.Teams.AnyAsync(t => t.TeamID == dto.TeamID);
+            if (!teamExists)
+                return NotFound("Drużyna nie została znaleziona.");
+
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    eventItem.EventStatus = EventStatus.Finished;
+                    eventItem.Result = dto.TeamID.ToString();
+
+                    var bets = await _dbContext.Bets
+                        .Include(b => b.Odd)
+                        .Include(b => b.User)
+                        .Where(b => b.EventID == dto.EventID && b.BetStatus == BetStatus.Open)
+                        .ToListAsync();
+
+                    foreach (var bet in bets)
+                    {
+                        if (bet.Odd.BetType == BetType.MatchWinner)
+                        {
+                            if (bet.Odd.TeamID == dto.TeamID)
+                            {
+                                bet.BetStatus = BetStatus.Won;
+                                decimal payout = bet.BetAmount * bet.Odd.OddsValue;
+                                bet.User.VirtualBalance += payout;
+                            }
+                            else
+                            {
+                                bet.BetStatus = BetStatus.Lost;
+                            }
+                        }
+                    }
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return Ok("Zakłady rozliczone!");
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Wystąpił błąd podczas rozliczania zakładów.");
+                }
+            }
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBet(int id)
         {
@@ -100,7 +161,7 @@ namespace banbet.Controllers
 
             if (bet == null)
                 return NotFound("Zakład nie został znaleziony.");
-
+                
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId) || bet.UserID != userId)
             {
@@ -109,5 +170,7 @@ namespace banbet.Controllers
 
             return Ok(bet);
         }
+
+
     }
 }
