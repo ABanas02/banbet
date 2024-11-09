@@ -34,14 +34,21 @@ namespace banbet.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        public async Task<IActionResult> GetUser([FromRoute] int? id)
         {
+            if (id is null) {
+                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized("Nieprawidłowy token użytkownika.");
+                }
+                id = userId;
+            }
             var user = await _dbContext.Users.FindAsync(id);
             if (user is null)
             {
                 return NotFound($"Uzytkownik o id: {id} nie istnieje");
             }
-
             return Ok(user);
         }
 
@@ -133,6 +140,7 @@ namespace banbet.Controllers
 
             var claims = new[]
             {
+                new Claim("userId", user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
                 new Claim(ClaimTypes.Role, user.Role)

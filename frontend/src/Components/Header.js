@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal'
 import './css/Header.css';
 import { Link } from 'react-router-dom';
 
-function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin}) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [userBalance, setUserBalance] = useState(null);
 
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -22,12 +23,36 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin})
     setShowRegister(true);
   };
 
+  useEffect(() => {
+    const fetchUserBalance = async () => {
+      if (!decodedJWT || !decodedJWT.userId) {
+        return;
+      }
+
+      const id = decodedJWT.userId;
+
+      try {
+        const response = await fetch(`http://localhost:8080/api/Account/${id}`);
+        const data = await response.json();
+        setUserBalance(data.virtualBalance);
+      } catch (error) {
+        console.error('Błąd podczas pobierania salda użytkownika:', error);
+      }
+    };
+
+    fetchUserBalance();
+  }, [decodedJWT]);
+  
+
   return (
     <header className="App-header">
       <div className="header-content">
         <Link to="/" className='app-name-link'>
           <h1 className="app-name">banbet</h1>
         </Link>
+        { isLoggedIn && (
+          <p>Saldo użytkownika: {userBalance}</p>
+        )}
         <div className='header-buttons'>
           {!isLoggedIn ? (
             <button className="login-button" onClick={handleLoginClick}>
