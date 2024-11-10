@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-
+import './css/UserBets.css';
 
 function UserBets(){
     const [bets, setBets] = useState([]);
@@ -30,28 +30,30 @@ function UserBets(){
     }, []);
 
     return (
-        <div>
-          <h3>Twoje zakłady</h3>
-          {bets.length === 0 ? (
-            <p>Nie masz jeszcze żadnych zakładów.</p>
-          ) : (
-            <ul>
-              {bets.map((bet) => (
-                <li key={bet.betID}>
-                  <p>Zakład ID: {bet.betID}</p>
-                  <p>Kwota zakładu: {bet.betAmount}</p>
-                  <p>Status zakładu: {getBetStatusName(bet.betStatus)}</p>
-                  <p>Data zakładu: {formatDate(bet.betDate)}</p>
-                  <p>Typ zakładu: {getBetTypeName(bet.odd.betType)}</p>
-                  <p>Kurs: {bet.odd.oddsValue}</p>
-                  {bet.odd.team && <p>Drużyna: {bet.odd.team.teamName}</p>}
-                  <p>Wydarzenie: {bet.odd.event.eventName}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      );
+      <div className="user-bets-container">
+        <h3 className="bets-header">Twoje zakłady</h3>
+        {bets.length === 0 ? (
+          <p className="no-bets-message">Nie masz jeszcze żadnych zakładów.</p>
+        ) : (
+          <ul className="bets-list">
+            {bets.map((bet) => (
+              <li key={bet.betID} className="bet-item">
+                <p className="bet-id">Zakład ID: {bet.betID}</p>
+                <p className="bet-amount">Kwota zakładu: {bet.betAmount}</p>
+                <p className={`bet-status ${getBetStatusName(bet.betStatus).toLowerCase()}`}>
+                  Status zakładu: {getBetStatusName(bet.betStatus)}
+                </p>
+                <p className="bet-date">Data zakładu: {formatDate(bet.betDate)}</p>
+                <p className="bet-type">Typ zakładu: {getBetTypeName(bet.odd.betType)}</p>
+                <p className="bet-odds">Kurs: {bet.odd.oddsValue}</p>
+                {bet.odd.team && <p className="bet-team">Drużyna: {bet.odd.team.teamName}</p>}
+                <p className="bet-event">Wydarzenie: {bet.odd.event.eventName}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
     }
     
     function getBetStatusName(betStatus) {

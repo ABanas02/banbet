@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal'
 import './css/Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [userBalance, setUserBalance] = useState(null);
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -17,6 +18,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     setIsAdmin(false);
+    navigate("/");
   };
 
   const handleRegisterClick = () => {
