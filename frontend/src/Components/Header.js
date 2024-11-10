@@ -4,7 +4,7 @@ import RegisterModal from './RegisterModal'
 import './css/Header.css';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT}) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT, userBalanceChanged}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [userBalance, setUserBalance] = useState(null);
@@ -43,7 +43,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
     };
 
     fetchUserBalance();
-  }, [decodedJWT]);
+  }, [decodedJWT, userBalanceChanged]);
   
 
   return (

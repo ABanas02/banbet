@@ -12,6 +12,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(checkIfAdmin());
   const [teamsChanged, setTeamsChanged] = useState(false);
   const [decodedJWT, setDecodedJWT] = useState('');
+  const [userBalanceChanged, setUserBalanceChanged] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -31,9 +32,9 @@ function App() {
     <Router>
       <div className="App">
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin} checkIfAdmin={checkIfAdmin}
-                decodedJWT={decodedJWT}/>
+                decodedJWT={decodedJWT} userBalanceChanged={userBalanceChanged}/>
         <Routes>
-          <Route path="/" element={<MainPageEvents />} />
+          <Route path="/" element={<MainPageEvents setUserBalanceChanged={setUserBalanceChanged}/>} />
           <Route path="/admin" element={<AdminPanel teamsChanged={teamsChanged} onTeamsChanged={() => setTeamsChanged(true)}/>} />
           <Route path="/user" element={<UserPanel />}/>
         </Routes>

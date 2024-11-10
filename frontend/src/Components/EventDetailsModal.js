@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './css/EventDetailsModal.css';
 
-function EventDetailsModal({ eventID, onClose }) {
+function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
   const [eventDetails, setEventDetails] = useState(null);
   const [betAmounts, setBetAmounts] = useState({});
   const [message, setMessage] = useState('');
@@ -66,6 +66,7 @@ function EventDetailsModal({ eventID, onClose }) {
       const data = await response.json();
       setMessage('Zakład został pomyślnie złożony.');
       setBetAmounts({ ...betAmounts, [odd.oddsID]: '' });
+      setUserBalanceChanged(true);
     } catch (error) {
       console.error(error);
       alert(error.message || 'Wystąpił błąd podczas składania zakładu.');

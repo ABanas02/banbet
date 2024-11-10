@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import EventDetailsModal from './EventDetailsModal';
 import './css/MainPageEvents.css';
 
-function MainPageEvents() {
+function MainPageEvents({setUserBalanceChanged}) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -61,7 +61,7 @@ function MainPageEvents() {
         </div>
       ))}
       {showModal && (
-        <EventDetailsModal eventID={selectedEventID} onClose={handleCloseModal} />
+        <EventDetailsModal eventID={selectedEventID} onClose={handleCloseModal} setUserBalanceChanged={setUserBalanceChanged} />
       )}
     </div>
   );
