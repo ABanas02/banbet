@@ -90,7 +90,7 @@ namespace banbet.Controllers
             return Ok(bets);
         }
 
-        [HttpPost]
+        [HttpPost("ResolveMatchWinner")]
         public async Task<IActionResult> ResolveMatchWinnerBets([FromBody] ResolveMatchWinnerDto dto)
         {
             if (!ModelState.IsValid)
@@ -151,6 +151,8 @@ namespace banbet.Controllers
                 }
             }
         }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBet(int id)
         {
@@ -170,7 +172,5 @@ namespace banbet.Controllers
 
             return Ok(bet);
         }
-
-
     }
 }
