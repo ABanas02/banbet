@@ -4,6 +4,7 @@ import AddTeamForm from './AddTeamForm';
 import CreateEventForm from './CreateEventForm';
 import AddTeamsToEventForm from './AddTeamsToEventForm';
 import SetOddsForm from './SetOddsForm';
+import ResolveMatchWinner from './ResolveMatchWinner';
 
 function AdminPanel({onTeamsChanged, teamsChanged}) {
   return (
@@ -14,6 +15,7 @@ function AdminPanel({onTeamsChanged, teamsChanged}) {
         <CreateEventForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
         <AddTeamsToEventForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
         <SetOddsForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
+        <ResolveMatchWinner/>
       </div>
     </div>
   );

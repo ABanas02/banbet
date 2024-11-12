@@ -63,6 +63,20 @@ namespace banbet.Controllers
             return Ok(team);
         }
 
+        [HttpGet("GetTeamsFromEvent/{eventID}")]
+        public async Task<IActionResult> GetTeamsFromEvent([FromRoute] int eventID) 
+        {
+            var teams = await _dbContext.EventTeams
+                                        .Where(et => et.EventID == eventID)
+                                        .Select(et => new {
+                                            et.Team.TeamID,
+                                            et.Team.TeamName
+                                        }).ToListAsync();
+            
+            return Ok(teams);
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam([FromRoute] int id)
         {
