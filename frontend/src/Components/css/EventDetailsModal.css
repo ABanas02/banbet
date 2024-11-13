@@ -76,6 +76,16 @@
   background-color: #0056b3;
 }
 
+.placeBetButton {
+  background-color: orange !important;
+  color: black !important;
+}
+
+.placeBetButton:hover {
+  background-color:#FF8C00 !important;
+}
+
+
 .modal-content button {
   padding: 10px 20px;
   margin-top: 20px;

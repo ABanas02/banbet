@@ -121,7 +121,7 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
                   value={betAmounts[odd.oddsID] || ''}
                   onChange={(e) => handleBetAmountChange(odd.oddsID, e.target.value)}
                 />
-                <button onClick={() => handlePlaceBet(odd)}>Złóż zakład</button>
+                <button className='placeBetButton' onClick={() => handlePlaceBet(odd)}>Złóż zakład</button>
               </div>
             </div>
           ))}
