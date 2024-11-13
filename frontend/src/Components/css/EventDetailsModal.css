@@ -1,51 +1,103 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background-color: #fff;
-    width: 80%;
-    max-width: 600px;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .modal-content h2 {
-    margin-top: 0;
-  }
-  
-  .odds-list {
-    margin-top: 20px;
-  }
-  
-  .odd-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .odd-item label {
-    display: block;
-    margin-top: 10px;
-  }
-  
-  .odd-item input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-  }
-  
-  .odd-item button {
-    margin-top: 10px;
-    padding: 10px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  color: #555555;
+  margin-bottom: 10px;
+}
+
+.odds-list {
+  margin-top: 20px;
+}
+
+.odd-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+}
+
+.odd-item p {
+  margin: 5px 0;
+}
+
+.odd-item label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.odd-item input[type="number"] {
+  width: 60%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.odd-item button {
+  margin-top: 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.odd-item button:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #ff4d4f;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal-content button:hover {
+  background-color: #cc3c3f;
+}
+
+.successAlert {
+  color: #28a745; 
+  background-color: #e6f4ea; 
+  padding: 10px;
+  margin: 15px 0;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-align: center;
+}

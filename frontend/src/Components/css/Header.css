@@ -1,98 +1,103 @@
+/* Header.css */
 
 .App-header {
-background-color: #282c34;
-padding: 20px;
-color: white;
-}
-
-.header-content {
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-
-.header-buttons {
-    justify-content: right;
-}
-
-.app-name {
-margin: 0;
-}
-
-.app-name-link {
+    background-color: #222;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    border-bottom: 2px solid #444;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .app-name-link {
     text-decoration: none;
-    color: inherit; 
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .app-name-link:hover {
+    color: #4caf50;
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 30px;
+  }
+  
+  .header-buttons button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px; /* Increased height */
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
     cursor: pointer;
-}
-
-.login-button {
-background-color: #61dafb;
-border: none;
-color: #282c34;
-padding: 10px 20px;
-font-size: 16px;
-cursor: pointer;
-border-radius: 5px;
-margin-right: 40px;
-}
-.register-button {
-background-color: #61dafb;
-border: none;
-color: #282c34;
-padding: 10px 20px;
-font-size: 16px;
-cursor: pointer;
-border-radius: 5px;
-margin-right: 18px;
-}
-
-.register-button:hover {
-background-color: #21a1f1;
-}
-
-.admin-button {
-background-color: #61dafb;
-border: none;
-color: #282c34;
-padding: 10px 20px;
-font-size: 16px;
-cursor: pointer;
-border-radius: 5px;
-margin-right: 18px;
-}
-
-.admin-button:hover {
-background-color: #21a1f1;
-}
-
-.login-button:hover {
-background-color: #21a1f1;
-}
-
-
-.logout-button {
-background-color: #61dafb;
-border: none;
-color: #282c34;
-padding: 10px 20px;
-font-size: 16px;
-cursor: pointer;
-border-radius: 5px;
-margin-right: 18px;
-}
-
-.logout-button:hover {
-background-color: #21a1f1;
-}
-
-
-@media (max-width: 600px) {
-.header-content {
-flex-direction: column;
-align-items: flex-start;
-}
-
-.login-button {
-margin-top: 10px;
-}
-}
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .header-buttons button:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+  }
+  
+  .header-buttons .logout-button,
+  .header-buttons .admin-button {
+    background-color: cornflowerblue;
+  }
+  
+  .header-buttons .logout-button:hover,
+  .header-buttons .admin-button:hover {
+    background-color: #6047c3;
+  }
+  
+  .register-button {
+    background-color: #008cba;
+  }
+  
+  .register-button:hover {
+    background-color: #007bb5;
+  }
+  
+  p {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .admin-button {
+    background-color: #ffa000;
+  }
+  
+  .admin-button:hover {
+    background-color: #ff8f00;
+  }
+  
+  @media (max-width: 768px) {
+    .App-header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 10px;
+    }
+  
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .app-name-link {
+      font-size: 1.3rem;
+    }
+  }
+  

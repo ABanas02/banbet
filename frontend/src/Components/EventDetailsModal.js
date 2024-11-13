@@ -103,7 +103,7 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
         <h2>{eventDetails.eventName}</h2>
         <p>{eventDetails.description}</p>
 
-        {message && <p>{message}</p>}
+        {message && <p className='successAlert'>{message}</p>}
 
         <h3>Kursy</h3>
         <div className="odds-list">
