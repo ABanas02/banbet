@@ -10,5 +10,6 @@ namespace banbet.Models.DTOs
         public BetType BetType { get; set; }
         public decimal OddsValue { get; set; }
         public int? TeamID { get; set; }
+        public string? TeamName { get; set; }
     }
 }

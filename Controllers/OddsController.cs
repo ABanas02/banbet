@@ -87,7 +87,8 @@ namespace banbet.Controllers
                 BetType = oddDto.BetType,
                 OddsValue = oddDto.OddsValue,
                 LastUpdated = DateTime.UtcNow,
-                TeamID = oddDto.TeamID
+                TeamID = oddDto.TeamID,
+                TeamName = oddDto.TeamName
             };
 
             _dbContext.Odds.Add(newOdd);

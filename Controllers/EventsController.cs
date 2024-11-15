@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using banbet.Data;
 using banbet.Models;
 using banbet.Models.DTOs;
@@ -75,7 +76,8 @@ namespace banbet.Controllers
                 {
                     BetType = o.BetType,
                     OddsValue = o.OddsValue,
-                    TeamID = o.TeamID
+                    TeamID = o.TeamID,
+                    TeamName = o.TeamName
                 }).ToList()
             }).ToList();
 
@@ -113,7 +115,8 @@ namespace banbet.Controllers
                     OddsID = o.OddsID,
                     BetType = o.BetType,
                     OddsValue = o.OddsValue,
-                    TeamID = o.TeamID
+                    TeamID = o.TeamID,
+                    TeamName = o.TeamName
                 }).ToList()
             };
 

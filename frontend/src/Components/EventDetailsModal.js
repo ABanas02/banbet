@@ -111,7 +111,7 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
             <div key={odd.oddsID} className="odd-item">
               <p>Typ zakładu: {getBetTypeName(odd.betType)}</p>
               <p>Kurs: {odd.oddsValue}</p>
-              {odd.teamID && <p>Drużyna: {odd.teamID}</p>}
+              {odd.teamID && <p>Drużyna: {odd.teamName}</p>}
               <div>
                 <label>Kwota zakładu:</label>
                 <input

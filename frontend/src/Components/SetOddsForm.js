@@ -8,6 +8,7 @@ function SetOddsForm() {
   const [oddsValue, setOddsValue] = useState('');
   const [selectedTeamID, setSelectedTeamID] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedTeamName, setSelectedTeamName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +58,7 @@ function SetOddsForm() {
             betType: parseInt(selectedBetType),
             oddsValue: parseFloat(oddsValue),
             teamID: selectedTeamID ? parseInt(selectedTeamID) : null,
+            teamName: selectedTeamName || null,
           }),
         }
       );
@@ -68,11 +70,11 @@ function SetOddsForm() {
 
       const data = await response.json();
       setMessage(`Kurs został pomyślnie ustawiony.`);
-      // Resetowanie pól formularza
       setSelectedEventID('');
       setSelectedBetType('');
       setOddsValue('');
       setSelectedTeamID('');
+      setSelectedTeamName('');
     } catch (error) {
       setMessage(error.message);
     }
@@ -110,11 +112,10 @@ function SetOddsForm() {
             required
           >
             <option value="">-- Wybierz typ zakładu --</option>
-            <option value="0">Zwycięzcaa</option>
+            <option value="0">Zwycięzca</option>
             <option value="Draw">Remis</option>
             <option value="TotalGoals">Łączna liczba goli</option>
             <option value="Handicap">Handicap</option>
-            {/* Dodaj inne typy zakładów, jeśli są */}
           </select>
         </div>
         <div>
@@ -132,7 +133,14 @@ function SetOddsForm() {
             <label>Wybierz drużynę:</label>
             <select
               value={selectedTeamID}
-              onChange={(e) => setSelectedTeamID(e.target.value)}
+              onChange={(e) => {
+                const selectedID = e.target.value;
+                setSelectedTeamID(selectedID);
+                const selectedTeam = teams.find(
+                  (team) => team.teamID === parseInt(selectedID)
+                );
+                setSelectedTeamName(selectedTeam ? selectedTeam.teamName : '');
+              }}
               required
             >
               <option value="">-- Wybierz drużynę --</option>
