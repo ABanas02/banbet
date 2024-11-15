@@ -23,8 +23,6 @@ namespace banbet.Models
         [Required]
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 
-
-
         public int? TeamID { get; set; }
         public Team Team { get; set; }
     }

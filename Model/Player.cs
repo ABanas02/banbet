@@ -19,8 +19,6 @@ namespace banbet.Models
 
         public DateTime? DateOfBirth { get; set; }
 
-        public string Statistics { get; set; } // Możesz użyć bardziej szczegółowej struktury
-
         public Team Team { get; set; }
     }
 }
