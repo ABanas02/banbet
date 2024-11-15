@@ -53,7 +53,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
           <h1 className="app-name">banbet</h1>
         </Link>
         { isLoggedIn && (
-          <p>Saldo użytkownika: {userBalance}</p>
+          <p className='user-balance'>Saldo użytkownika: {userBalance}</p>
         )}
         <div className='header-buttons'>
           {!isLoggedIn ? (

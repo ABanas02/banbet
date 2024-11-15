@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace banbet.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/{controller}")]
     public class EventsController: ControllerBase
@@ -135,7 +135,7 @@ namespace banbet.Controllers
             _dbContext.Events.Remove(singleEvent);
             await _dbContext.SaveChangesAsync();
 
-            return Ok($"Usunieto uzytkownika o id:{id}");
+            return Ok($"Usunieto event o id:{id}");
         }
     }
 }

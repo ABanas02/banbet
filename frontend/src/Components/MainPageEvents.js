@@ -38,16 +38,14 @@ function MainPageEvents({setUserBalanceChanged}) {
     setSelectedEventID(null);
   };
 
-  if (loading) {
-    return <p>Ładowanie wydarzeń...</p>;
-  }
-
-  if (error) {
-    return <p>Błąd: {error}</p>;
-  }
-
   return (
     <div className="events-container">
+      { loading && (
+        <p>Ładowanie wydarzeń</p>
+      )}
+      { error && (
+        <p>Błąd: {error}</p>
+      )}
       {events.map((event) => (
         <div key={event.eventID} className="event-card" onClick={() => handleEventClick(event.eventID)}>
           {event.teams && event.teams.length >= 2 ? (
