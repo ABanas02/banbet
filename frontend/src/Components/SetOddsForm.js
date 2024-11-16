@@ -15,10 +15,10 @@ function SetOddsForm() {
       try {
         const token = localStorage.getItem('token');
         const [eventsResponse, teamsResponse] = await Promise.all([
-          fetch(`http://localhost:8080/api/Events`, {
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Events`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`http://localhost:8080/api/Team`, {
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Team`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -46,7 +46,7 @@ function SetOddsForm() {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:8080/api/Odds/SetOdds`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/Odds/SetOdds`,
         {
           method: 'POST',
           headers: {

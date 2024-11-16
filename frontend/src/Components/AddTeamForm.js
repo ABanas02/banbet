@@ -10,7 +10,7 @@ function AddTeamForm({teamsChanged, onTeamsChanged}) {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:8080/api/Team/AddTeam`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/Team/AddTeam`,
         {
           method: 'POST',
           headers: {

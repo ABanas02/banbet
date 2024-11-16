@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import './CreateEventForm.css';
 
 function CreateEventForm() {
   const [eventName, setEventName] = useState('');
@@ -13,7 +12,7 @@ function CreateEventForm() {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:8080/api/Events`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/Events`,
         {
           method: 'POST',
           headers: {

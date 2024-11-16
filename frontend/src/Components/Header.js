@@ -34,7 +34,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
       const id = decodedJWT.userId;
 
       try {
-        const response = await fetch(`http://localhost:8080/api/Account/${id}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Account/${id}`);
         const data = await response.json();
         setUserBalance(data.virtualBalance);
       } catch (error) {
