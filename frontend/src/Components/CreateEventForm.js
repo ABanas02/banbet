@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { eventsChangedSignal } from './Signals/teamsSignal';
 
 function CreateEventForm() {
   const [eventName, setEventName] = useState('');
@@ -36,6 +37,7 @@ function CreateEventForm() {
       setEventName('');
       setStartDateTime('');
       setDescription('');
+      eventsChangedSignal.value = !eventsChangedSignal.value;
     } catch (error) {
       setMessage(error.message);
     }

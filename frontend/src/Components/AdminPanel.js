@@ -6,16 +6,16 @@ import AddTeamsToEventForm from './AddTeamsToEventForm';
 import SetOddsForm from './SetOddsForm';
 import ResolveMatchWinner from './ResolveMatchWinner';
 
-function AdminPanel({onTeamsChanged, teamsChanged}) {
+function AdminPanel() {
   return (
     <div className="admin-panel">
       <h2>Panel Administratora</h2>
       <div className="admin-forms">
-        <AddTeamForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
-        <CreateEventForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
-        <AddTeamsToEventForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
-        <SetOddsForm onTeamsChanged={onTeamsChanged} teamsChanged={teamsChanged}/>
-        <ResolveMatchWinner/>
+        <AddTeamForm />
+        <CreateEventForm />
+        <AddTeamsToEventForm />
+        <SetOddsForm />
+        <ResolveMatchWinner />
       </div>
     </div>
   );

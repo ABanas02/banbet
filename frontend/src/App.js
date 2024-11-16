@@ -10,7 +10,6 @@ import UserPanel from './Components/UserPanel';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [isAdmin, setIsAdmin] = useState(checkIfAdmin());
-  const [teamsChanged, setTeamsChanged] = useState(false);
   const [decodedJWT, setDecodedJWT] = useState('');
   const [userBalanceChanged, setUserBalanceChanged] = useState(false);
 
@@ -35,7 +34,7 @@ function App() {
                 decodedJWT={decodedJWT} userBalanceChanged={userBalanceChanged}/>
         <Routes>
           <Route path="/" element={<MainPageEvents setUserBalanceChanged={setUserBalanceChanged}/>} />
-          <Route path="/admin" element={<AdminPanel teamsChanged={teamsChanged} onTeamsChanged={() => setTeamsChanged(true)}/>} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/user" element={<UserPanel />}/>
         </Routes>
       </div>
@@ -51,7 +50,7 @@ function App() {
   
     try {
       const decodedToken = jwtDecode(token);
-      console.log(decodedToken);
+      //console.log(decodedToken);
       //console.log(decodedToken.sub);
       const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       if (role === "User") {

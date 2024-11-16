@@ -1,41 +1,49 @@
+import { useSignalEffect } from '@preact/signals-react';
 import React, { useState, useEffect } from 'react';
+import { teamsChangedSignal, eventsChangedSignal } from './Signals/teamsSignal';
 
-function AddTeamsToEventForm({onTeamsChanged, teamsChanged}) {
+function AddTeamsToEventForm() {
   const [events, setEvents] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const fetchEventsAndTeams = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const [eventsResponse, teamsResponse] = await Promise.all([
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Events`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Team`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+  const fetchEventsAndTeams = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const [eventsResponse, teamsResponse] = await Promise.all([
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Events`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Team`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
 
-        if (!eventsResponse.ok || !teamsResponse.ok) {
-          throw new Error('Błąd podczas pobierania danych.');
-        }
-
-        const eventsData = await eventsResponse.json();
-        const teamsData = await teamsResponse.json();
-
-        setEvents(eventsData);
-        setTeams(teamsData);
-      } catch (error) {
-        setMessage(error.message);
+      if (!eventsResponse.ok || !teamsResponse.ok) {
+        throw new Error('Błąd podczas pobierania danych.');
       }
-    };
 
+      const eventsData = await eventsResponse.json();
+      const teamsData = await teamsResponse.json();
+
+      setEvents(eventsData);
+      setTeams(teamsData);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  useSignalEffect(() => {
+    console.log('teamsChangedSignal.value:', teamsChangedSignal.value);
+    console.log('eventsChangedSignal.value:', eventsChangedSignal.value);
     fetchEventsAndTeams();
-  }, [teamsChanged]);
+  });
+
+  useEffect(() => {
+    fetchEventsAndTeams();
+  }, []);
 
   const handleAddTeamsToEvent = async (e) => {
     e.preventDefault();

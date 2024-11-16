@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { teamsChangedSignal } from './Signals/teamsSignal';
 
-function AddTeamForm({teamsChanged, onTeamsChanged}) {
+function AddTeamForm() {
   const [teamName, setTeamName] = useState('');
   const [message, setMessage] = useState('');
 
@@ -28,7 +29,7 @@ function AddTeamForm({teamsChanged, onTeamsChanged}) {
       const data = await response.json();
       setMessage(`Drużyna ${data.teamName} została dodana.`);
       setTeamName('');
-      onTeamsChanged();
+      teamsChangedSignal.value = !teamsChangedSignal.value;
     } catch (error) {
       setMessage(error.message);
     }

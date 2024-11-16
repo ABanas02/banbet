@@ -27,11 +27,12 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
 
   useEffect(() => {
     const fetchUserBalance = async () => {
-      if (!decodedJWT || !decodedJWT.userId) {
+      if (!decodedJWT || !decodedJWT.sub) {
         return;
       }
 
-      const id = decodedJWT.userId;
+      const id = decodedJWT.sub;
+      console.log(id);
 
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Account/${id}`);

@@ -140,7 +140,6 @@ namespace banbet.Controllers
 
             var claims = new[]
             {
-                new Claim("userId", user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
                 new Claim(ClaimTypes.Role, user.Role)
