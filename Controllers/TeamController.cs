@@ -71,7 +71,9 @@ namespace banbet.Controllers
                                         .Select(et => new {
                                             et.Team.TeamID,
                                             et.Team.TeamName
-                                        }).ToListAsync();
+                                        })
+                                        .AsNoTracking()
+                                        .ToListAsync();
             
             return Ok(teams);
         }

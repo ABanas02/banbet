@@ -62,7 +62,9 @@ var app = builder.Build();
 app.UseCors("AllowReactApp");
 
 // wykonanie migracji
-app.ApplyMigrations();
+if (app.Environment.IsDevelopment()){
+    app.ApplyMigrations();
+}
 
 app.UseHttpsRedirection();
 

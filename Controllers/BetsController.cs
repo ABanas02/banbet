@@ -85,6 +85,7 @@ namespace banbet.Controllers
                 .Include(b => b.Odd)
                 .ThenInclude(o => o.Event)
                 .Where(b => b.UserID == userId)
+                .AsNoTracking()
                 .ToListAsync();
 
             return Ok(bets);

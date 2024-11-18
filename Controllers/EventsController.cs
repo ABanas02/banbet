@@ -57,6 +57,7 @@ namespace banbet.Controllers
                 .Include(e => e.EventTeams)
                     .ThenInclude(et => et.Team)
                 .Where(e => e.EventStatus == EventStatus.Upcoming)
+                .AsNoTracking()
                 .ToListAsync();
 
             var eventDtos = events.Select(eventItem => new EventResponseDto
@@ -93,6 +94,7 @@ namespace banbet.Controllers
                 .Include(e => e.Odds)
                 .Include(e => e.EventTeams)
                     .ThenInclude(et => et.Team)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.EventID == id);
 
             if (eventItem == null)

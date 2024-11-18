@@ -27,6 +27,7 @@ namespace banbet.Controllers
             var odds = await _dbContext.Odds
                 .Include(o => o.Event)
                 .ThenInclude(e => e.Bets)
+                .AsNoTracking()
                 .ToListAsync();
             
             return Ok(odds);
@@ -37,6 +38,7 @@ namespace banbet.Controllers
         {
             var odd = await _dbContext.Odds
                 .Include(o => o.Event)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(o => o.OddsID == id);
 
             if (odd is null)
