@@ -50,14 +50,15 @@ function App() {
   
     try {
       const decodedToken = jwtDecode(token);
-      //console.log(decodedToken);
+      console.log(decodedToken);
       //console.log(decodedToken.sub);
-      const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      const role = decodedToken.role;
+      //console.log(role);
       if (role === "User") {
         return false;
-      } else {
-        return true;
       }
+      return true;
+      
     } catch (error) {
       console.error('Błąd podczas dekodowania tokenu JWT:', error);
       return null;
