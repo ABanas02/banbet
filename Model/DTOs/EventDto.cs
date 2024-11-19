@@ -11,6 +11,8 @@ namespace banbet.Models.DTOs
         [Required]
         public DateTime StartDateTime { get; set; }
 
+        public Category Category { get; set; }
+
         public string Description { get; set; }
 
     }

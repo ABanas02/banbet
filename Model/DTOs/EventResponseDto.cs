@@ -9,6 +9,7 @@ namespace banbet.Models.DTOs
         public string? EventName { get; set; }
         public DateTime StartDateTime { get; set; }
         public EventStatus EventStatus { get; set; }
+        public Category Category { get; set; }
         public string? Result { get; set; }
         public string? Description { get; set; }
 

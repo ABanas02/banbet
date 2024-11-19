@@ -39,7 +39,8 @@ namespace banbet.Controllers
                 EventName = eventDto.EventName,
                 StartDateTime = startDateTimeUtc,
                 Description = eventDto.Description,
-                EventStatus = EventStatus.Upcoming
+                EventStatus = EventStatus.Upcoming,
+                Category = eventDto.Category
             };
 
             _dbContext.Events.Add(newEvent);
@@ -68,6 +69,7 @@ namespace banbet.Controllers
                 EventStatus = eventItem.EventStatus,
                 Result = eventItem.Result,
                 Description = eventItem.Description,
+                Category = eventItem.Category,
                 Teams = eventItem.EventTeams.Select(et => new TeamDto
                 {
                     TeamID = et.Team.TeamID,

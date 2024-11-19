@@ -86,6 +86,19 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
     }
   }
 
+  function getCategoryName(category) {
+    switch (category) {
+      case 0:
+        return 'Piłka nożna';
+      case 1:
+        return 'Koszykówka';
+      case 2:
+        return 'Siatkówka';
+      default:
+        return 'Inna kategoria';
+    }
+  }
+
   if (!eventDetails) {
     return (
       <div className="modal-overlay">
@@ -100,8 +113,11 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{eventDetails.eventName}</h2>
+        <h1>
+          {eventDetails.teams[0].teamName} vs {eventDetails.teams[1].teamName}
+        </h1>
         <p>{eventDetails.description}</p>
+        <h3>{getCategoryName(eventDetails.category)}</h3>
 
         {message && <p className='successAlert'>{message}</p>}
 

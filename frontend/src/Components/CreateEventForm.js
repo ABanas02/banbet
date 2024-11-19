@@ -5,6 +5,7 @@ function CreateEventForm() {
   const [eventName, setEventName] = useState('');
   const [startDateTime, setStartDateTime] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
 
   const handleCreateEvent = async (e) => {
@@ -24,6 +25,7 @@ function CreateEventForm() {
             eventName,
             startDateTime,
             description,
+            category: parseInt(category)
           }),
         }
       );
@@ -56,6 +58,19 @@ function CreateEventForm() {
             onChange={(e) => setEventName(e.target.value)}
             required
           />
+        </div>
+        <div>
+        <label>Kategoria:</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          >
+            <option value="">-- Wybierz kategorię --</option>
+            <option value="0">Piłka nożna</option>
+            <option value="1">Koszykówka</option>
+            <option value="2">Siatkówka</option>
+          </select>
         </div>
         <div>
           <label>Data i godzina rozpoczęcia:</label>

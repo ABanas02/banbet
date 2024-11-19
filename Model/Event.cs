@@ -18,6 +18,8 @@ namespace banbet.Models
         [Required]
         public EventStatus EventStatus { get; set; } = EventStatus.Upcoming;
 
+        public Category Category { get; set; }
+
         public string? Result { get; set; }
 
         public string? Description { get; set; }
@@ -27,6 +29,12 @@ namespace banbet.Models
         public ICollection<Odd>? Odds { get; set; }
 
         public ICollection<EventTeam> EventTeams { get; set; } = new List<EventTeam>();
+    }
+
+    public enum Category {
+        Football,
+        Basketball,
+        Voleyball
     }
 
     public enum EventStatus
