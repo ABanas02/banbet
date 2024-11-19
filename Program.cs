@@ -22,7 +22,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>
 (
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database"))
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseLocal"))
 );
 
 
@@ -62,9 +62,9 @@ var app = builder.Build();
 app.UseCors("AllowReactApp");
 
 // wykonanie migracji
-if (app.Environment.IsDevelopment()){
-    app.ApplyMigrations();
-}
+// if (app.Environment.IsDevelopment()){
+//     app.ApplyMigrations();
+// }
 
 app.UseHttpsRedirection();
 
