@@ -1,8 +1,11 @@
+using banbet.CustomExceptions;
 using banbet.Data;
 using banbet.Models;
 using banbet.Models.DTOs;
+using banbet.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace banbet.Controllers
@@ -15,20 +18,19 @@ namespace banbet.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<OddsController> _logger;
 
-        public OddsController(ApplicationDbContext dbContext, ILogger<OddsController> logger)
+        private readonly OddsService _oddsService;
+
+        public OddsController(ApplicationDbContext dbContext, ILogger<OddsController> logger, OddsService oddsService)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _oddsService = oddsService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetOdds()
         {
-            var odds = await _dbContext.Odds
-                .Include(o => o.Event)
-                .ThenInclude(e => e.Bets)
-                .AsNoTracking()
-                .ToListAsync();
+            var odds = await _oddsService.GetOdds();
             
             return Ok(odds);
         }
@@ -36,34 +38,37 @@ namespace banbet.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOdd([FromRoute] int id)
         {
-            var odd = await _dbContext.Odds
-                .Include(o => o.Event)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(o => o.OddsID == id);
-
-            if (odd is null)
+            try 
             {
-                return BadRequest($"Nie znaleziono odds o id:{id}");
+                var odd = await _oddsService.GetOdd(id);
+                return Ok(odd);
+            } 
+            catch (EntityNotFoundException ex) 
+            {
+                return NotFound(new { Message = ex.Message});
+            } 
+            catch (Exception) 
+            {
+                return StatusCode(500, "Błąd serwera");
             }
-
-            return Ok(odd);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveOdd([FromRoute] int id)
         {
-            var odd = await _dbContext.Odds.FindAsync(id);
-            
-            if (odd is null)
+            try 
             {
-                return BadRequest($"Nie znaleziono odds o id:{id}");
+                await _oddsService.DeleteOdd(id);
+                return Ok($"Usunięto odds o id:{id}");
+            } 
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message});
             }
-
-            _dbContext.Odds.Remove(odd);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok($"Usunieto odds o id:{id}");
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera");
+            }
         }
 
         [HttpPost("SetOdds")]
@@ -72,31 +77,19 @@ namespace banbet.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var eventExists = await _dbContext.Events.AnyAsync(e => e.EventID == oddDto.EventID);
-            if (!eventExists)
-                return NotFound($"Wydarzenie o ID {oddDto.EventID} nie istnieje.");
-
-            if (oddDto.TeamID.HasValue)
+            try
             {
-                var team = await _dbContext.Teams.FindAsync(oddDto.TeamID.Value);
-                if (team == null)
-                    return NotFound($"Drużyna o ID {oddDto.TeamID.Value} nie istnieje.");
+                var newOdd = await _oddsService.SetOdds(oddDto);
+                return Ok(newOdd);
             }
-
-            var newOdd = new Odd
+            catch (EntityNotFoundException ex)
             {
-                EventID = oddDto.EventID,
-                BetType = oddDto.BetType,
-                OddsValue = oddDto.OddsValue,
-                LastUpdated = DateTime.UtcNow,
-                TeamID = oddDto.TeamID,
-                TeamName = oddDto.TeamName
-            };
-
-            _dbContext.Odds.Add(newOdd);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(newOdd);
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
     }
 

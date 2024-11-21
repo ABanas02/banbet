@@ -4,6 +4,8 @@ using System.Text;
 using banbet.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using banbet.Services;
+using banbet.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +58,8 @@ builder.Services.AddCors(options =>
                   .AllowAnyHeader();
         });
 });
+
+builder.Services.AddScoped<OddsService>();
 
 var app = builder.Build();
 

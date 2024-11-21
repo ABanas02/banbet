@@ -1,5 +1,5 @@
 bin
 .vscode
 obj
-
+.VSCodeCounter
 fronted/node_modules
