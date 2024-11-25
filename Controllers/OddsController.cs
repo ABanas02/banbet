@@ -15,15 +15,10 @@ namespace banbet.Controllers
     [Route("api/{controller}")]
     public class OddsController: ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<OddsController> _logger;
-
         private readonly OddsService _oddsService;
 
         public OddsController(ApplicationDbContext dbContext, ILogger<OddsController> logger, OddsService oddsService)
         {
-            _dbContext = dbContext;
-            _logger = logger;
             _oddsService = oddsService;
         }
 

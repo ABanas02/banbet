@@ -61,7 +61,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<OddsService>();
 builder.Services.AddScoped<CreateAdminService>();
-
+builder.Services.AddScoped<EventsService>();
 
 var app = builder.Build();
 

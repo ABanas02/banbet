@@ -54,7 +54,7 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
         <Link to="/" className='app-name-link'>
           <h1 className="app-name">banbet</h1>
         </Link>
-        { isLoggedIn && (
+        { isLoggedIn && !isAdmin && (
           <p className='user-balance'>Saldo użytkownika: {userBalance}</p>
         )}
         <div className='header-buttons'>
