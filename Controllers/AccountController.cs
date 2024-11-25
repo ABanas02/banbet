@@ -24,6 +24,7 @@ namespace banbet.Controllers
             _dbContext = dbContext;
             _configuration = configuration;
         }
+
         
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()

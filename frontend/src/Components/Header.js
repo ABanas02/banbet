@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import LoginModal from './LoginModal';
-import RegisterModal from './RegisterModal'
+import RegisterModal from './RegisterModal';
 import './css/Header.css';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT, userBalanceChanged}) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, decodedJWT,
+  userBalanceChanged }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [userBalance, setUserBalance] = useState(null);
+
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -45,7 +47,6 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
 
     fetchUserBalance();
   }, [decodedJWT, userBalanceChanged]);
-  
 
   return (
     <header className="App-header">
@@ -93,8 +94,8 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
       )}
       {showRegister && (
         <RegisterModal
-        onClose={() => setShowRegister(false)}
-        setIsLoggedIn={setIsLoggedIn}
+          onClose={() => setShowRegister(false)}
+          setIsLoggedIn={setIsLoggedIn}
         />
       )}
     </header>

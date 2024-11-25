@@ -60,8 +60,20 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<OddsService>();
+builder.Services.AddScoped<CreateAdminService>();
+
 
 var app = builder.Build();
+
+// użycie metody która tworzy konto admina dla nowych użytkowników aplikacji
+// by mieli dostęp do wszystkich funkcjonalności 
+using (var scope = app.Services.CreateScope())
+{
+    var adminService = scope.ServiceProvider.GetRequiredService<CreateAdminService>();
+    await adminService.CreateAdmin();
+}
+
+
 
 app.UseCors("AllowReactApp");
 
