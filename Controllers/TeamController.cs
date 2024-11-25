@@ -1,99 +1,110 @@
-using banbet.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using banbet.Services;
 using banbet.Models.DTOs;
-using banbet.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using banbet.CustomExceptions;
 
 namespace banbet.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     public class TeamController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<TeamController> _logger;
-
-        public TeamController(ApplicationDbContext dbContext, ILogger<TeamController> logger)
+        private readonly TeamService _teamService;
+        public TeamController(TeamService teamService)
         {
-            _dbContext = dbContext;
-            _logger = logger;
+            _teamService = teamService;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetTeams()
         {
-            var teams = await _dbContext.Teams.ToListAsync();
-
-            if (teams.Count == 0 || teams is null)
+            try
             {
-                return NotFound("Nie znaleziono zadnych druzyn");
+                var teams = await _teamService.GetTeams();
+                return Ok(teams);
             }
-
-            return Ok(teams);
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTeam([FromRoute] int id)
         {
-            var team = await _dbContext.Teams.FindAsync(id);
-
-            if (team is null)
+            try
             {
-                return NotFound($"Nie znaleziono druzyny o id: {id}");
+                var team = await _teamService.GetTeam(id);
+                return Ok(team);
             }
-
-            return Ok(team);
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpPost("AddTeam")]
         public async Task<IActionResult> AddTeam([FromBody] TeamDto teamDto)
         {
-            var team = new Team
+            try
             {
-                TeamName = teamDto.TeamName
-            };
-
-            _dbContext.Teams.Add(team);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(team);
+                var team = await _teamService.AddTeam(teamDto);
+                return Ok(team);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpGet("GetTeamsFromEvent/{eventID}")]
-        public async Task<IActionResult> GetTeamsFromEvent([FromRoute] int eventID) 
+        public async Task<IActionResult> GetTeamsFromEvent([FromRoute] int eventID)
         {
-            var teams = await _dbContext.EventTeams
-                                        .Where(et => et.EventID == eventID)
-                                        .Select(et => new {
-                                            et.Team.TeamID,
-                                            et.Team.TeamName
-                                        })
-                                        .AsNoTracking()
-                                        .ToListAsync();
-            
-            return Ok(teams);
+            try
+            {
+                var teams = await _teamService.GetTeamsFromEvent(eventID);
+                return Ok(teams);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam([FromRoute] int id)
         {
-            var team = _dbContext.Teams.Find(id);
-
-            if (team is null)
+            try
             {
-                return NotFound($"Nie znaleziono druzyny z id:{id}");
+                await _teamService.DeleteTeam(id);
+                return Ok(new { Message = $"Usunięto drużynę o ID {id}." });
             }
-
-            _dbContext.Teams.Remove(team);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok($"Usunięto druzyne {team.TeamName}");
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpPost("AddTeamsToEvent")]
@@ -102,28 +113,23 @@ namespace banbet.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var eventItem = await _dbContext.Events.FindAsync(dto.EventID);
-            if (eventItem == null)
-                return NotFound($"Wydarzenie o ID {dto.EventID} nie istnieje.");
-
-            foreach (var teamId in dto.TeamIDs)
+            try
             {
-                var team = await _dbContext.Teams.FindAsync(teamId);
-                if (team == null)
-                    return NotFound($"Drużyna o ID {teamId} nie istnieje.");
-
-                var eventTeam = new EventTeam
-                {
-                    EventID = dto.EventID,
-                    TeamID = teamId
-                };
-
-                _dbContext.EventTeams.Add(eventTeam);
+                var resultMessage = await _teamService.AddTeamsToEvent(dto);
+                return Ok(new { Message = resultMessage });
             }
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok($"Drużyny zostały dodane do wydarzenia o ID {dto.EventID}.");
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
     }
 }

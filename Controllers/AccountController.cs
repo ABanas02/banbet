@@ -1,162 +1,125 @@
-using banbet.Data;
-using banbet.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+using System;
 using System.Security.Claims;
-using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using banbet.Services;
 using banbet.Models.DTOs;
-using System.Text.Json;
+using banbet.CustomExceptions;
+using Microsoft.Extensions.Logging;
 
-namespace banbet.Controllers 
+namespace banbet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IConfiguration _configuration;
-        
-        public AccountController(ApplicationDbContext dbContext, IConfiguration configuration)
+        private readonly AccountService _accountService;
+
+        public AccountController(AccountService accountService)
         {
-            _dbContext = dbContext;
-            _configuration = configuration;
+            _accountService = accountService;
         }
 
-        
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _dbContext.Users.ToListAsync();
-
-            return Ok(users);
+            try
+            {
+                var users = await _accountService.GetUsers();
+                return Ok(users);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id?}")]
         public async Task<IActionResult> GetUser([FromRoute] int? id)
         {
-            if (id is null) {
-                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized("Nieprawidłowy token użytkownika.");
-                }
-                id = userId;
-            }
-            var user = await _dbContext.Users.FindAsync(id);
-            if (user is null)
+            try
             {
-                return NotFound($"Uzytkownik o id: {id} nie istnieje");
+                var user = await _accountService.GetUser(id, User);
+                return Ok(user);
             }
-            return Ok(user);
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { Message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            if (registerDto == null) {
-                return BadRequest("Nieprawidłowe dane użytkownika");
-            }
-
-            if (string.IsNullOrEmpty(registerDto.Username) || string.IsNullOrEmpty(registerDto.Password) || string.IsNullOrEmpty(registerDto.Email))
+            try
             {
-                return BadRequest("Wszystkie pola są wymagane.");
+                var resultMessage = await _accountService.Register(registerDto);
+                return Ok(new { Message = resultMessage });
             }
-            
-            if (await _dbContext.Users.AnyAsync(u => u.Username == registerDto.Username))
+            catch (ArgumentNullException ex)
             {
-                return BadRequest("Użytkownik o danej nazwie już istnieje!");
+                return BadRequest(new { Message = ex.Message });
             }
-
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
-
-            string role = "User";
-            if (!string.IsNullOrEmpty(registerDto.Role) && registerDto.Role == "Admin")
+            catch (ArgumentException ex)
             {
-                role = "Admin";
+                return BadRequest(new { Message = ex.Message });
             }
-
-            
-
-            var user = new User 
+            catch (InvalidOperationException ex)
             {
-                Username = registerDto.Username,
-                PasswordHash = passwordHash,
-                Email = registerDto.Email,
-                Role = role
-            };
-
-            _dbContext.Users.Add(user);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok($"Utworzono nowego użytkownika:{user.Username} {user.BirthDate} {user.Email}");
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-
-            if (user is null)
+            try
             {
-                return NotFound($"Uzytkownik o id: {id} nie istnieje");
+                var resultMessage = await _accountService.DeleteUser(id);
+                return Ok(new { Message = resultMessage });
             }
-            
-            _dbContext.Users.Remove(user);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok($"Usunięto uzytkownika o nazwie: {user.Username}, id: {user.UserID}");
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
 
-        
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == loginDto.Username);
-
-            if (user is null)
+            try
             {
-                return NotFound("Nie znaleziono uzytkownika");
-            }
-
-            if (BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
-            {
-                var token = GenerateJwtToken(user);
+                var token = await _accountService.Login(loginDto);
                 return Ok(new { Token = token });
             }
-
-
-            return BadRequest("Weryfikacja nieudana");
-        }
-
-        
-
-        private string GenerateJwtToken(User user)
-        {
-            var jwtSettings = _configuration.GetSection("JwtSettings");
-
-            var claims = new[]
+            catch (EntityNotFoundException ex)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserID.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim("role", user.Role)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(12),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd serwera.");
+            }
         }
     }
 }

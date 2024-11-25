@@ -62,6 +62,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<OddsService>();
 builder.Services.AddScoped<CreateAdminService>();
 builder.Services.AddScoped<EventsService>();
+builder.Services.AddScoped<BetsService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<TeamService>();
 
 var app = builder.Build();
 
