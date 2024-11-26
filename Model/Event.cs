@@ -26,7 +26,7 @@ namespace banbet.Models
 
         public ICollection<Bet>? Bets { get; set; }
 
-        public ICollection<Odd>? Odds { get; set; }
+        public ICollection<Odd> Odds { get; set; } = new List<Odd>();
 
         public ICollection<EventTeam> EventTeams { get; set; } = new List<EventTeam>();
     }

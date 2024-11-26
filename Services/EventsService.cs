@@ -92,9 +92,11 @@ namespace banbet.Services
                 EventStatus = eventItem.EventStatus,
                 Result = eventItem.Result,
                 Description = eventItem.Description,
+                Category = eventItem.Category,
                 Teams = eventItem.EventTeams.Select(et => new TeamDto
                 {
-                    TeamName = et.Team.TeamName,
+                    TeamID = et.Team.TeamID,
+                    TeamName = et.Team.TeamName
                 }).ToList(),
                 Odds = eventItem.Odds.Select(o => new OddDto
                 {
@@ -124,7 +126,7 @@ namespace banbet.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public Array GetCategories()
+        public string[] GetCategories()
         {
             return Enum.GetNames(typeof(Category));
         }
