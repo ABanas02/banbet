@@ -90,5 +90,12 @@ namespace banbet.Controllers
                 return StatusCode(500, "Błąd serwera");
             }
         }
+
+        [HttpGet("Categories")]
+        public IActionResult GetCategories()
+        {
+            var categories = _eventsService.GetCategories();
+            return Ok(categories);
+        }
     }
 }

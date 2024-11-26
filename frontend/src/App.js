@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminPanel from './Components/AdminPanel';
 import UserPanel from './Components/UserPanel';
 import WelcomeScreen from './Components/WelcomeScreen';
+import CategoryForm from './Components/CategoryForm';
 import { jwtDecode } from 'jwt-decode';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [decodedJWT, setDecodedJWT] = useState('');
   const [userBalanceChanged, setUserBalanceChanged] = useState(false);
   const [showWelcomeScreen, setShowWelcomeScreen] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -41,6 +43,7 @@ function App() {
   };
 
   return (
+    
     <Router>
       <div className="App">
         <Header 
@@ -56,7 +59,14 @@ function App() {
           <WelcomeScreen onClose={handleCloseWelcome} />
         )}
         <Routes>
-          <Route path="/" element={<MainPageEvents setUserBalanceChanged={setUserBalanceChanged}/>} />
+          <Route path="/" element=
+            {
+            <>
+              <MainPageEvents setUserBalanceChanged={setUserBalanceChanged} categories={categories}/>
+              <CategoryForm setCategories={setCategories}/>
+            </>
+            } 
+          />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/user" element={<UserPanel />}/>
         </Routes>

@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react';
 import EventDetailsModal from './EventDetailsModal';
 import './css/MainPageEvents.css';
 
-function MainPageEvents({setUserBalanceChanged}) {
+function MainPageEvents({ setUserBalanceChanged, categories }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedEventID, setSelectedEventID] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  // Mapowanie wartości numerycznych na nazwy kategorii
+  const categoryMap = {
+    0: 'Football',
+    1: 'Basketball',
+    2: 'Volleyball',
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -38,15 +45,24 @@ function MainPageEvents({setUserBalanceChanged}) {
     setSelectedEventID(null);
   };
 
+  function getCategoryName(categoryValue) {
+    return categoryMap[categoryValue];
+  }
+
+  // Filtrowanie wydarzeń
+  const filteredEvents = events.filter((event) => {
+    if (categories.length === 0) {
+      return true;
+    }
+    const eventCategoryName = getCategoryName(event.category);
+    return categories.includes(eventCategoryName);
+  });
+
   return (
     <div className="events-container">
-      { loading && (
-        <p>Ładowanie wydarzeń</p>
-      )}
-      { error && (
-        <p>Błąd: {error}</p>
-      )}
-      {events.map((event) => (
+      {loading && <p>Ładowanie wydarzeń...</p>}
+      {error && <p>Błąd: {error}</p>}
+      {filteredEvents.map((event) => (
         <div key={event.eventID} className="event-card" onClick={() => handleEventClick(event.eventID)}>
           {event.teams && event.teams.length >= 2 ? (
             <h3>
@@ -55,11 +71,16 @@ function MainPageEvents({setUserBalanceChanged}) {
           ) : (
             <h3>{event.eventName}</h3>
           )}
+          <p>Kategoria: {getCategoryName(event.category)}</p>
           <p>Data: {new Date(event.startDateTime).toLocaleString()}</p>
         </div>
       ))}
       {showModal && (
-        <EventDetailsModal eventID={selectedEventID} onClose={handleCloseModal} setUserBalanceChanged={setUserBalanceChanged} />
+        <EventDetailsModal
+          eventID={selectedEventID}
+          onClose={handleCloseModal}
+          setUserBalanceChanged={setUserBalanceChanged}
+        />
       )}
     </div>
   );

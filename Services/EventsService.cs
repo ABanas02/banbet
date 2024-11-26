@@ -123,5 +123,10 @@ namespace banbet.Services
             _dbContext.Events.Remove(singleEvent);
             await _dbContext.SaveChangesAsync();
         }
+
+        public Array GetCategories()
+        {
+            return Enum.GetNames(typeof(Category));
+        }
     }
 }
