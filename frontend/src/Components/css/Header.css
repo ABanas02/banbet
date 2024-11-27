@@ -1,114 +1,205 @@
 .App-header {
-    background-color: #222;
-    padding: 10px 15px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 1.2rem 2.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #fff;
-    border-bottom: 2px solid #444;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .header-content {
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header-content {
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: space-between;
     position: relative;
-  }
-  
-  .user-balance {
-    position: absolute; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: white;
-  }
+    max-width: 1400px;
+    margin: 0 auto;
+}
 
-  .app-name-link {
+.user-balance {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.7rem 1.5rem;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0;
+}
+
+.user-balance:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(-50%) translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.app-name-link {
     text-decoration: none;
     color: #fff;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .app-name-link:hover {
-    color: orange;
-  }
-  
-  .header-buttons {
-    display: flex;
-    gap: 30px;
-  }
-  
-  .header-buttons button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  .header-buttons button:hover {
-    background-color: #45a049;
-    transform: translateY(-1px);
-  }
-  
-  .header-buttons .logout-button,
-  .header-buttons .admin-button {
-    background-color: orange;
-    color: black;
-  }
-  
-  .header-buttons .logout-button:hover,
-  .header-buttons .admin-button:hover {
-    background-color: #FF8C00;
-    color: black;
-  }
-  
-  .register-button {
-    background-color: #008cba;
-  }
-  
-  .register-button:hover {
-    background-color: #007bb5;
-  }
-  
-  p {
-    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.app-name {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     margin: 0;
-    font-weight: bold;
-  }
-  
-  .admin-button {
-    background-color: #ffa000;
-  }
-  
-  .admin-button:hover {
-    background-color: #ff8f00;
-  }
-  
-  @media (max-width: 768px) {
+    background: linear-gradient(45deg, #fff 30%, #ffd700 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.app-name-link:hover .app-name {
+    background: linear-gradient(45deg, #ffd700 30%, #fff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transform: scale(1.05);
+    letter-spacing: 2px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+
+.header-buttons button {
+    padding: 0.8rem 1.6rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+}
+
+.header-buttons button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.header-buttons button:hover::before {
+    left: 100%;
+}
+
+.login-button {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.2);
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.register-button {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    box-shadow: 0 2px 10px rgba(33, 150, 243, 0.2);
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.logout-button,
+.admin-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    color: white;
+    box-shadow: 0 2px 10px rgba(255, 152, 0, 0.2);
+}
+
+.logout-button:hover,
+.admin-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+}
+
+@media (max-width: 768px) {
     .App-header {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 8px 10px;
+        padding: 1rem;
     }
-  
+
     .header-content {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+        flex-direction: column;
+        gap: 1.2rem;
+        align-items: center;
     }
-  
-    .app-name-link {
-      font-size: 1.3rem;
+
+    .user-balance {
+        position: relative;
+        transform: none;
+        left: 0;
+        margin: 0.8rem 0;
+        width: auto;
+        min-width: 200px;
     }
-  }
-  
+
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header-buttons button {
+        flex: 1;
+        min-width: 140px;
+        max-width: 200px;
+        padding: 0.7rem 1.2rem;
+    }
+
+    .app-name {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-buttons button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+
+    .app-name {
+        font-size: 1.6rem;
+    }
+
+    .user-balance {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+}

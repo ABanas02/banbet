@@ -1,11 +1,11 @@
 import React from 'react';
 import UserBets from './UserBets';
+import './css/UserPanel.css';
 
 function UserPanel() {
     return (
-        <div className='admin-panel'>
-            <h2>Panel użytkownika</h2>
-            <div className='admin-forms'>
+        <div className="user-panel-container">
+            <div className="user-panel-content">
                 <UserBets />
             </div>
         </div>

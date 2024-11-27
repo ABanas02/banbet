@@ -102,8 +102,12 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
     return (
       <div className="modal-overlay">
         <div className="modal-content">
-          <p>Ładowanie...</p>
-          <button onClick={onClose}>Zamknij</button>
+          <div className="modal-body">
+            <p className="loading-text">Ładowanie...</p>
+          </div>
+          <div className="modal-footer">
+            <button className="close-button" onClick={onClose}>Zamknij</button>
+          </div>
         </div>
       </div>
     );
@@ -113,38 +117,66 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-body">
-          <h1>
-            {eventDetails.teams[0].teamName} vs {eventDetails.teams[1].teamName}
-          </h1>
-          <p>{eventDetails.description}</p>
-          <h3>{getCategoryName(eventDetails.category)}</h3>
-  
-          {message && <p className='successAlert'>{message}</p>}
-  
-          <h3>Kursy</h3>
-          <div className="odds-list">
-            {eventDetails.odds.map((odd) => (
-              <div key={odd.oddsID} className="odd-item">
-                <p>Typ zakładu: {getBetTypeName(odd.betType)}</p>
-                <p>Kurs: {odd.oddsValue}</p>
-                {odd.teamID && <p>Drużyna: {odd.teamName}</p>}
-                <div>
-                  <label>Kwota zakładu:</label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="0.01"
-                    value={betAmounts[odd.oddsID] || ''}
-                    onChange={(e) => handleBetAmountChange(odd.oddsID, e.target.value)}
-                  />
-                  <button className='placeBetButton' onClick={() => handlePlaceBet(odd)}>Złóż zakład</button>
+          <div className="event-header">
+            <h1 className="event-title">
+              {eventDetails.teams[0].teamName} vs {eventDetails.teams[1].teamName}
+            </h1>
+            <div className="event-category">
+              {getCategoryName(eventDetails.category)}
+            </div>
+            {eventDetails.description && (
+              <p className="event-description">{eventDetails.description}</p>
+            )}
+          </div>
+
+          {message && <div className="successAlert">{message}</div>}
+
+          <div className="betting-section">
+            <h2 className="betting-title">Kursy</h2>
+            <div className="odds-list">
+              {eventDetails.odds.map((odd) => (
+                <div key={odd.oddsID} className="odd-item">
+                  <div className="odd-details">
+                    <p className="bet-type">
+                      <span className="label">Typ zakładu:</span>
+                      <span className="value">{getBetTypeName(odd.betType)}</span>
+                    </p>
+                    <p className="odds-value">
+                      <span className="label">Kurs:</span>
+                      <span className="value">{odd.oddsValue}</span>
+                    </p>
+                    {odd.teamID && (
+                      <p className="team-name">
+                        <span className="label">Drużyna:</span>
+                        <span className="value">{odd.teamName}</span>
+                      </p>
+                    )}
+                  </div>
+                  <div className="bet-input-section">
+                    <label htmlFor={`bet-amount-${odd.oddsID}`}>Kwota zakładu:</label>
+                    <input
+                      id={`bet-amount-${odd.oddsID}`}
+                      type="number"
+                      min="1"
+                      step="0.01"
+                      value={betAmounts[odd.oddsID] || ''}
+                      onChange={(e) => handleBetAmountChange(odd.oddsID, e.target.value)}
+                      className="bet-amount-input"
+                    />
+                    <button 
+                      className="place-bet-button"
+                      onClick={() => handlePlaceBet(odd)}
+                    >
+                      Złóż zakład
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button onClick={onClose}>Zamknij</button>
+          <button className="close-button" onClick={onClose}>Zamknij</button>
         </div>
       </div>
     </div>

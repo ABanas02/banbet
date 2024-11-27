@@ -12,6 +12,17 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
   const handleLoginClick = () => {
     setShowLogin(true);
   };
@@ -34,7 +45,6 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
       }
 
       const id = decodedJWT.sub;
-      console.log(id);
 
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Account/${id}`);
@@ -59,9 +69,11 @@ function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin, checkIfAdmin, 
         )}
         <div className='header-buttons'>
           {!isLoggedIn ? (
-            <button className="login-button" onClick={handleLoginClick}>
+            <>
+              <button className="login-button" onClick={handleLoginClick}>
               Zaloguj
-            </button>
+              </button>
+            </>
           ) : (
             <button className="logout-button" onClick={handleLogoutClick}>
               Wyloguj
