@@ -6,7 +6,7 @@
 }
 
 .user-panel-header {
-    color: #1a237e;
+    color: #fff;
     font-size: 2rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -15,10 +15,11 @@
 }
 
 .user-panel-content {
-    background: #f8f9fa;
+    background: #1a1a2e;
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {

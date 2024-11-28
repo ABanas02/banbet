@@ -9,7 +9,6 @@ import ResolveMatchWinner from './ResolveMatchWinner';
 function AdminPanel() {
   return (
     <div className="admin-panel">
-      <h2>Panel Administratora</h2>
       <div className="admin-forms">
         <AddTeamForm />
         <CreateEventForm />

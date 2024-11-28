@@ -4,6 +4,7 @@ import "./css/CategoryForm.css";
 function CategoryForm({ setCategories }) {
   const [fetchedCategories, setFetchedCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,25 +34,51 @@ function CategoryForm({ setCategories }) {
     setCategories(updatedSelectedCategories);
   };
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="category-form">
-      <h3 className="category-form__title">Wybierz kategorię wydarzenia</h3>
-      <div className="category-form__checkboxes">
-        {fetchedCategories.map((category) => (
-          <div key={category} className="category-form__checkbox">
-            <input
-              type="checkbox"
-              value={category}
-              onChange={handleCategoryForm}
-              checked={selectedCategories.includes(category)}
-              id={`category-${category}`}
-              className="category-form__input"
-            />
-            <label htmlFor={`category-${category}`} className="category-form__label">
-              {category}
-            </label>
-          </div>
-        ))}
+    <div className={`category-form ${isOpen ? 'open' : 'closed'}`}>
+      <button 
+        className="category-form__toggle"
+        onClick={toggleSidebar}
+        aria-label={isOpen ? 'Zamknij panel kategorii' : 'Otwórz panel kategorii'}
+      >
+        <svg 
+          className="category-form__toggle-icon" 
+          viewBox="0 0 24 24" 
+          width="32" 
+          height="32"
+        >
+          <path 
+            fill="currentColor" 
+            d={isOpen 
+              ? "M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"  // Left arrow when open
+              : "M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"  // Right arrow when closed
+            }
+          />
+        </svg>
+      </button>
+      <div className="category-form__content">
+        <h3 className="category-form__title">Wybierz kategorię wydarzenia</h3>
+        <div className="category-form__checkboxes">
+          {fetchedCategories.map((category) => (
+            <div key={category} className="category-form__checkbox">
+              <input
+                type="checkbox"
+                value={category}
+                onChange={handleCategoryForm}
+                checked={selectedCategories.includes(category)}
+                id={`category-${category}`}
+                className="category-form__input"
+              />
+              <label htmlFor={`category-${category}`} className="category-form__label">
+                {category}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -48,6 +48,11 @@ function AddTeamsToEventForm() {
   const handleAddTeamsToEvent = async (e) => {
     e.preventDefault();
 
+    if (selectedTeams.length === 0) {
+      setMessage('Proszę wybrać co najmniej jedną drużynę.');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
@@ -60,7 +65,7 @@ function AddTeamsToEventForm() {
           },
           body: JSON.stringify({
             eventID: selectedEvent,
-            teamIDs: selectedTeams,
+            teamIDs: selectedTeams.map(id => parseInt(id)),
           }),
         }
       );
@@ -79,18 +84,14 @@ function AddTeamsToEventForm() {
   };
 
   const handleTeamSelection = (e) => {
-    const value = parseInt(e.target.value);
-    if (e.target.checked) {
-      setSelectedTeams([...selectedTeams, value]);
-    } else {
-      setSelectedTeams(selectedTeams.filter((id) => id !== value));
-    }
+    const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+    setSelectedTeams(selectedOptions);
   };
 
   return (
     <div className="form-container">
       <h3>Dodaj drużyny do wydarzenia</h3>
-      {message && <p>{message}</p>}
+      {message && <p className={message.includes('Błąd') ? 'error' : 'success'}>{message}</p>}
       <form onSubmit={handleAddTeamsToEvent}>
         <div>
           <label>Wybierz wydarzenie:</label>
@@ -109,17 +110,21 @@ function AddTeamsToEventForm() {
         </div>
         <div>
           <label>Wybierz drużyny:</label>
-          {teams.map((team) => (
-            <div key={team.teamID}>
-              <input
-                type="checkbox"
-                value={team.teamID}
-                onChange={handleTeamSelection}
-                checked={selectedTeams.includes(team.teamID)}
-              />
-              <label>{team.teamName}</label>
-            </div>
-          ))}
+          <select
+            multiple
+            value={selectedTeams}
+            onChange={handleTeamSelection}
+            required
+            size={5}
+            className="multi-select"
+          >
+            {teams.map((team) => (
+              <option key={team.teamID} value={team.teamID}>
+                {team.teamName}
+              </option>
+            ))}
+          </select>
+          <small className="select-hint">Przytrzymaj Ctrl aby wybrać wiele drużyn</small>
         </div>
         <button type="submit">Dodaj drużyny do wydarzenia</button>
       </form>
