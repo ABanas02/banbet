@@ -77,6 +77,8 @@ namespace banbet.Services
             var bets = await _dbContext.Bets
                 .Include(b => b.Odd)
                     .ThenInclude(o => o.Event)
+                    .ThenInclude(o => o.EventTeams)
+                    .ThenInclude(et => et.Team)
                 .Where(b => b.UserID == userId)
                 .AsNoTracking()
                 .ToListAsync();

@@ -95,13 +95,16 @@ function UserBets() {
                                         Kurs {bet.odd.oddsValue}
                                     </div>
                                 </div>
-                                {bet.odd.team && (
+                                {bet.odd.teamName && (
                                     <div className="bet-team">
-                                        {bet.odd.team.teamName}
+                                        {bet.odd.teamName}
                                     </div>
                                 )}
                                 <div className="bet-event">
-                                    {bet.odd.event.eventName}
+                                    {bet.odd.event.eventTeams && bet.odd.event.eventTeams.length >= 2 ? 
+                                        `${bet.odd.event.eventTeams[0].team.teamName} vs ${bet.odd.event.eventTeams[1].team.teamName}` :
+                                        'Nieznane drużyny'
+                                    }
                                 </div>
                                 <div className="bet-date">
                                     {formatDate(bet.betDate)}
