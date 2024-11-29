@@ -3,9 +3,8 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 25px;
   padding: 30px;
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 0 auto;
-  margin-left: 270px;
 }
 
 .event-card {
