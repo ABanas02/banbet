@@ -24,7 +24,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>
 (
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseLocal"))
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseDocker"))
 );
 
 

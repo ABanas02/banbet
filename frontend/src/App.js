@@ -57,7 +57,7 @@ function App() {
           decodedJWT={decodedJWT} 
           userBalanceChanged={userBalanceChanged}
         />
-        <MainPageWelcomeText />
+        
         {showWelcomeScreen && (
           <WelcomeScreen onClose={handleCloseWelcome} />
         )}
@@ -65,6 +65,7 @@ function App() {
           <Route path="/" element=
             {
             <>
+              <MainPageWelcomeText />
               <MainPageEvents setUserBalanceChanged={setUserBalanceChanged} categories={categories}/>
               <CategoryForm setCategories={setCategories}/>
             </>
