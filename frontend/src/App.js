@@ -7,6 +7,8 @@ import AdminPanel from './Components/AdminPanel';
 import UserPanel from './Components/UserPanel';
 import WelcomeScreen from './Components/WelcomeScreen';
 import CategoryForm from './Components/CategoryForm';
+import Footer from './Components/Footer';
+import MainPageWelcomeText from './Components/MainPageWelcomeText';
 import { jwtDecode } from 'jwt-decode';
 
 function App() {
@@ -55,6 +57,7 @@ function App() {
           decodedJWT={decodedJWT} 
           userBalanceChanged={userBalanceChanged}
         />
+        <MainPageWelcomeText />
         {showWelcomeScreen && (
           <WelcomeScreen onClose={handleCloseWelcome} />
         )}
@@ -70,6 +73,7 @@ function App() {
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/user" element={<UserPanel />}/>
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

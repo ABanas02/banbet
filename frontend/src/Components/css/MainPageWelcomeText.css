@@ -1,0 +1,58 @@
+.welcomeTextContainer {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    position: relative;
+    perspective: 1000px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.welcomeText {
+    position: relative;
+    display: inline-block;
+    letter-spacing: 2px;
+    margin: 0;
+    background: linear-gradient(
+        45deg,
+        #00ff9d, 
+        #ff6b00, 
+        #a64dff,  
+        #00ff9d,  
+        #ff8533, 
+        #00ff9d   
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientFlow 8s linear infinite;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcomeTextContainer {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcomeTextContainer {
+        font-size: 2rem;
+    }
+}
