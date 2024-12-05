@@ -8,31 +8,63 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
   const [error, setError] = useState(null);
   const [selectedEventID, setSelectedEventID] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isRecommended, setIsRecommended] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Mapowanie wartości numerycznych na nazwy kategorii
   const categoryMap = {
     0: 'Football',
     1: 'Basketball',
     2: 'Volleyball',
   };
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Events`);
-        if (!response.ok) {
-          throw new Error('Błąd podczas pobierania wydarzeń.');
-        }
-        const data = await response.json();
-        setEvents(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+  const fetchNormalEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/Events`);
+      if (!response.ok) {
+        throw new Error('Błąd podczas pobierania wydarzeń.');
       }
-    };
+      const data = await response.json();
+      setEvents(data);
+      setIsRecommended(false);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
-    fetchEvents();
+  const fetchRecommendedEvents = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const recommendedResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/Events/recommended`, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      if (recommendedResponse.ok) {
+        const data = await recommendedResponse.json();
+        setEvents(data);
+        setIsRecommended(true);
+        setLoading(false);
+      } else {
+        throw new Error('Nie udało się pobrać rekomendowanych wydarzeń');
+      }
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+    fetchNormalEvents();
   }, []);
 
   const handleEventClick = (eventID) => {
@@ -49,7 +81,6 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
     return categoryMap[categoryValue];
   }
 
-  // Filtrowanie wydarzeń
   const filteredEvents = events.filter((event) => {
     if (categories.length === 0) {
       return true;
@@ -60,6 +91,27 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
 
   return (
     <div className="events-container">
+      {isLoggedIn && (
+        <div className="events-controls">
+          <button 
+            onClick={fetchNormalEvents}
+            className={!isRecommended ? 'active' : ''}
+          >
+            Wszystkie wydarzenia
+          </button>
+          <button 
+            onClick={fetchRecommendedEvents}
+            className={isRecommended ? 'active' : ''}
+          >
+            Rekomendowane wydarzenia
+          </button>
+        </div>
+      )}
+      {isRecommended && (
+        <div className="recommendation-banner">
+          Wyświetlanie spersonalizowanych rekomendacji wydarzeń na podstawie Twojej historii zakładów
+        </div>
+      )}
       {loading && <p>Ładowanie wydarzeń...</p>}
       {error && <p>Błąd: {error}</p>}
       {filteredEvents.map((event) => (

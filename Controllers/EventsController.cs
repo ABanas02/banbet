@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace banbet.Controllers
 {
@@ -17,13 +18,15 @@ namespace banbet.Controllers
     public class EventsController: ControllerBase
     {
         private readonly EventsService _eventsService;
+        private readonly RecommendationService _recommendationService;
         
         public EventsController(
-            ILogger<EventsController> logger,
-            EventsService eventsService
+            EventsService eventsService,
+            RecommendationService recommendationService
             )
         {
             _eventsService = eventsService;
+            _recommendationService = recommendationService;
         }
 
         [HttpPost]
@@ -36,7 +39,6 @@ namespace banbet.Controllers
             }
             
             var newEvent = await _eventsService.CreateEvent(eventDto);
-
             return Ok(newEvent);
         }
 
@@ -54,6 +56,26 @@ namespace banbet.Controllers
             }
         }
 
+        [HttpGet("recommended")]
+        [Authorize]
+        public async Task<IActionResult> GetRecommendedEvents()
+        {
+            try 
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return BadRequest("Nieprawidłowy identyfikator użytkownika");
+                }
+
+                var recommendedEvents = await _recommendationService.GetRecommendedEvents(userId);
+                return Ok(recommendedEvents);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Błąd podczas pobierania rekomendowanych wydarzeń");
+            }
+        }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
@@ -71,7 +93,6 @@ namespace banbet.Controllers
             {
                 return StatusCode(500, "Błąd serwera");
             }
-
         }
 
         [HttpDelete("{id}")]

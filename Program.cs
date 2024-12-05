@@ -24,7 +24,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>
 (
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseDocker"))
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseLocal"))
 );
 
 
@@ -65,6 +65,7 @@ builder.Services.AddScoped<EventsService>();
 builder.Services.AddScoped<BetsService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<TeamService>();
+builder.Services.AddScoped<RecommendationService>();
 
 var app = builder.Build();
 

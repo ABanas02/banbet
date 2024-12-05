@@ -10,6 +10,7 @@
 }
 
 .welcomeText {
+    max-width: 80vw;
     position: relative;
     display: inline-block;
     letter-spacing: 2px;
