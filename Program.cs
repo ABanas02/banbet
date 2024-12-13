@@ -27,7 +27,6 @@ builder.Services.AddDbContext<ApplicationDbContext>
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseLocal"))
 );
 
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.AddAuthentication(options =>
 {
@@ -59,13 +58,18 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Rejestracja serwisów
 builder.Services.AddScoped<OddsService>();
-builder.Services.AddScoped<CreateAdminService>();
+builder.Services.AddScoped<FirstStartupSetupService>();
 builder.Services.AddScoped<EventsService>();
 builder.Services.AddScoped<BetsService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<TeamService>();
 builder.Services.AddScoped<RecommendationService>();
+builder.Services.AddScoped<AIRecommendationService>();
+
+// Rejestracja HttpClient jako Singleton
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -73,11 +77,9 @@ var app = builder.Build();
 // by mieli dostęp do wszystkich funkcjonalności 
 using (var scope = app.Services.CreateScope())
 {
-    var adminService = scope.ServiceProvider.GetRequiredService<CreateAdminService>();
-    await adminService.CreateAdmin();
+    var firstStartupSetupService = scope.ServiceProvider.GetRequiredService<FirstStartupSetupService>();
+    await firstStartupSetupService.FirstStartupDataSetup();
 }
-
-
 
 app.UseCors("AllowReactApp");
 
@@ -94,5 +96,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-

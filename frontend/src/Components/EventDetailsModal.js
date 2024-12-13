@@ -118,9 +118,15 @@ function EventDetailsModal({ eventID, onClose, setUserBalanceChanged}) {
       <div className="modal-content">
         <div className="modal-body">
           <div className="event-header">
-            <h1 className="event-title">
-              {eventDetails.teams[0].teamName} vs {eventDetails.teams[1].teamName}
-            </h1>
+            {eventDetails.teams.length !== 0 ?
+              <h1 className="event-title">
+                {eventDetails.teams[0].teamName} vs {eventDetails.teams[1].teamName}
+              </h1>
+              :
+              <h1 className="no-teams-added-alert">
+                Nie dodano żadnych drużyn do wydarzenia!!
+              </h1>
+            }
             <div className="event-category">
               {getCategoryName(eventDetails.category)}
             </div>

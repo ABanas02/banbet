@@ -10,6 +10,7 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
   const [showModal, setShowModal] = useState(false);
   const [isRecommended, setIsRecommended] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [recommendationType, setRecommendationType] = useState('basic');
 
   const categoryMap = {
     0: 'Football',
@@ -34,12 +35,12 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
     }
   };
 
-  const fetchRecommendedEvents = async () => {
+  const fetchRecommendedEvents = async (strategy) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
       const recommendedResponse = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/Events/recommended`, 
+        `${process.env.REACT_APP_BACKEND_URL}/api/Events/recommended?strategy=${strategy}`, 
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -89,27 +90,45 @@ function MainPageEvents({ setUserBalanceChanged, categories }) {
     return categories.includes(eventCategoryName);
   });
 
+  const handleRecommendationTypeChange = (type) => {
+    setRecommendationType(type);
+    if (type === 'normal') {
+      fetchNormalEvents();
+    } else {
+      fetchRecommendedEvents(type === 'ai' ? 'AI' : 'Basic');
+    }
+  };
+
   return (
     <div className="events-container">
       {isLoggedIn && (
         <div className="events-controls">
           <button 
-            onClick={fetchNormalEvents}
+            onClick={() => handleRecommendationTypeChange('normal')}
             className={!isRecommended ? 'active' : ''}
           >
             Wszystkie wydarzenia
           </button>
           <button 
-            onClick={fetchRecommendedEvents}
-            className={isRecommended ? 'active' : ''}
+            onClick={() => handleRecommendationTypeChange('basic')}
+            className={isRecommended && recommendationType === 'basic' ? 'active' : ''}
           >
-            Rekomendowane wydarzenia
+            Podstawowe rekomendacje
+          </button>
+          <button 
+            onClick={() => handleRecommendationTypeChange('ai')}
+            className={isRecommended && recommendationType === 'ai' ? 'active' : ''}
+          >
+            Rekomendacje AI
           </button>
         </div>
       )}
       {isRecommended && (
         <div className="recommendation-banner">
-          Wyświetlanie spersonalizowanych rekomendacji wydarzeń na podstawie Twojej historii zakładów
+          {recommendationType === 'ai' 
+            ? 'Wyświetlanie rekomendacji opartych na sztucznej inteligencji'
+            : 'Wyświetlanie podstawowych rekomendacji na podstawie Twojej historii zakładów'
+          }
         </div>
       )}
       {loading && <p>Ładowanie wydarzeń...</p>}

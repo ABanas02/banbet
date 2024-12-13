@@ -12,7 +12,6 @@ using System.Security.Claims;
 
 namespace banbet.Controllers
 {
-    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/{controller}")]
     public class EventsController: ControllerBase
@@ -58,7 +57,7 @@ namespace banbet.Controllers
 
         [HttpGet("recommended")]
         [Authorize]
-        public async Task<IActionResult> GetRecommendedEvents()
+        public async Task<IActionResult> GetRecommendedEvents([FromQuery] RecommendationStrategy strategy = RecommendationStrategy.Basic)
         {
             try 
             {
@@ -68,7 +67,7 @@ namespace banbet.Controllers
                     return BadRequest("Nieprawidłowy identyfikator użytkownika");
                 }
 
-                var recommendedEvents = await _recommendationService.GetRecommendedEvents(userId);
+                var recommendedEvents = await _recommendationService.GetRecommendedEvents(userId, strategy);
                 return Ok(recommendedEvents);
             }
             catch (Exception)
